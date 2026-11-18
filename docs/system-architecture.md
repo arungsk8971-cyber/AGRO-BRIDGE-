@@ -1,53 +1,82 @@
-# System Architecture
+AGRO-BRIDGE — Project Roadmap
 
-## 1. Architectural Overview
+1. Vision
 
-Agro Bridge is engineered as a **zero-framework, single-file HTML5 client application** (`index.html`) served via Vite in development (`port 3000`) and compiled into a self-contained static bundle (`dist/index.html`). All styling, vector line-art, state management, and screen rendering live inside `index.html`, with Google Fonts (`Fraunces` and `Inter`) as the sole external network dependency.
+Build a technology-driven agricultural supply-chain network that connects farmers, buyers, storage infrastructure, and logistics through an integrated platform.
 
-```text
-+-------------------------------------------------------------------+
-|                        Browser Runtime                            |
-|  index.html (Inline CSS + Inline SVG Art + Pure JS State Engine)  |
-|                                                                   |
-|  [Auth Gate] -> [Menu] -> [Sell / Track / Market / Shop / Acct]   |
-|                    |                                              |
-|           In-Memory State Store                                   |
-|     (lots[], orders[], alerts[], cart{}, profile, settings)       |
-+-------------------------------------------------------------------+
-```
+2. Phase 1 — Platform Development
 
----
+Objective: Build the initial working product.
 
-## 2. Core Modules Inside `index.html`
+- Develop separate farmer and buyer interfaces.
+- Implement user registration and account management.
+- Enable produce listings with quantity, quality, and pricing.
+- Add A/B/C quality grading.
+- Implement buyer ordering and booking workflows.
+- Develop order and delivery tracking.
+- Establish the initial technical architecture.
 
-### A. Visual & Design Token Layer (`<style>`)
-- **Tokens**: CSS custom properties define `--ink` (`#0a0a0a`), `--text` (`#1a1a1a`), `--muted` (`#767676`), `--accent` (`#905831`), `--tan` (`#f1e3d3`), and semantic status pills (`#ece5dc`, `#dcefdc`, `#fbe5cf`).
-- **Compositor Isolation**: The static topographic background (`#bgLayer`) blurs to `7px` on login (`class="dim"`), while the continuously moving truck (`#bgTruckLayer`) animates on its own `will-change: transform` layer to keep frame compositing lightweight.
-- **Responsive Breakpoints**: Adapts across desktop (`≥860px`), tablet (`≤860px`), and mobile (`≤760px`, switching top pill nav to a safe-area-aware bottom tab bar).
+3. Phase 2 — Market Intelligence
 
-### B. Inline SVG Illustration & Icon Engine
-- **Scene Illustrations**: `heroSceneSvg()` (field → collection hub → market isometric scene) and `logisticsSceneSvg()` (side-view truck, location pin, sun, and horizon).
-- **Icon System (`iconSvg`)**: Standardized `64×64` `viewBox` line-art library (`1.8px` stroke, `#ffffff` and `#f1e3d3` fills, `#905831` accents) covering navigation, payments, farm inputs, and produce (`tomato`, `onion`, `potato`, `chilli`, `banana`).
+Objective: Develop the market-balancing system.
 
-### C. Pure Domain & Calculation Functions
-All business math and validation rules are isolated into pure functions so both the browser UI and Node unit tests (`tests/agroBridge.test.ts`, 11 test cases) execute identical logic:
-- `getGradeRate(crop, grade)` & `gradeLotFromChecklist(crop, checklist)`: Applies `GRADE_MULTIPLIERS` (`A: 1.00`, `B: 0.92`, `C: 0.85`) deterministically from verified checklist criteria and produces an auditable inspection evidence record (`checkedItems`, `missingItems`, `reason`).
-- `calculateNetRealization(crop, qtyKg, checkedCount)`: Computes 4-way net farmer proceeds (Local Mandi, Self-Haul to Deficit City, Agro Bridge Farm Gate, Agro Bridge Hub Drop) incorporating corridor freight, mandi brokerage, transit spoilage risk, hub drop credit, and milk-run consolidation bonuses.
-- `getClusterPoolStatus(crop, qtyKg)`: Evaluates whether a farmer's lot unlocks the `1,500 kg` full-truckload milk-run bonus (`+₹0.40–₹0.80/kg`).
-- `calculateLotPayout(lot)`, `getPendingPayout(lots)`, `getPayoutAdjustedTotal(orders)`, & `getAvailablePendingPayout(lots, orders)`: Computes net payable credit after deducting prior `Adjust from payout` input orders, preventing double-spending.
-- `getForecastAccuracyStats(lots)`: Compares pre-booking predicted realization (`predictedNet`) against settled payout on completed lots (`stage >= 6`).
-- `validateOtpCode`, `isValidEmail`, `isValidPickupDate`, & `validateSettingsForm`: Strict input validation for 4-digit numeric OTPs, emails, future pickup dates, UPI IDs, 9–18 digit bank accounts, and 11-character IFSC codes.
-- `t(key, fallback)` & `jsArg(val)`: Multilingual localization lookup (`English`, `ಕನ್ನಡ`, `हिन्दी`, `தமிழ்`) and safe JSON-encoded HTML attribute escaping.
+- Collect regional crop-price information.
+- Identify surplus and shortage regions.
+- Compare prices across different markets.
+- Record buyer demand and required quantities.
+- Calculate procurement and distribution costs.
+- Develop destination recommendations based on expected margins.
 
-### D. State & Render Loop
-- **No Web Storage**: All state resides in a single in-memory `state` object (no `localStorage`, no `sessionStorage`, no `<form>` elements).
-- **Deterministic Re-render**: Every user action mutates `state` and calls `renderApp()`, keeping DOM markup synchronized with current application state.
+4. Phase 3 — Initial Pilot
 
----
+Objective: Validate the business model in one taluk.
 
-## 3. Target Production Evolution
+- Onboard local farmers.
+- Identify and onboard B2B buyers.
+- Establish a collection-centre process.
+- Test quality inspection and procurement.
+- Build initial storage and logistics partnerships.
+- Conduct trial deliveries.
+- Measure costs, margins, delivery performance, and customer feedback.
 
-When moving beyond the demonstration prototype to a multi-user production platform:
-1. **API & Auth Gateway**: Replace demo login tabs with OTP/OAuth verification and signed JWT sessions.
-2. **Real-Time Telemetry**: Stream lot stage transitions, digital weighbridge receipts, and GPS fleet coordinates over WebSockets/Server-Sent Events.
-3. **Persistent Ledger**: Back lot grading, payouts, and input orders with an ACID relational database and idempotent UPI/IMPS disbursement webhooks.
+5. Phase 4 — District Expansion
+
+Objective: Establish a connected regional network.
+
+- Expand farmer and buyer participation.
+- Establish additional collection centres.
+- Introduce district-level storage hubs.
+- Improve inventory and logistics management.
+- Expand regional market-price comparisons.
+- Optimize transportation and distribution.
+
+6. Phase 5 — Multi-State Expansion
+
+Objective: Build a larger agricultural distribution network.
+
+- Connect agricultural markets across states.
+- Develop inter-state logistics partnerships.
+- Introduce demand forecasting and advanced market intelligence.
+- Improve storage and distribution infrastructure.
+- Build long-term partnerships with large-scale buyers.
+
+7. Key Success Indicators
+
+The project will measure progress through:
+
+- Number of active farmers and buyers.
+- Quantity of produce procured and distributed.
+- Farmer price realization.
+- Procurement and delivery costs.
+- Storage and spoilage losses.
+- Order fulfilment and delivery reliability.
+- Gross margin per transaction.
+- Number of successful interregional transactions.
+
+8. Long-Term Goal
+
+Transform AGRO-BRIDGE into an integrated agricultural infrastructure network that intelligently coordinates procurement, storage, market demand, and transportation.
+
+The ultimate goal is to make agricultural trade more transparent, efficient, accessible, and scalable.
+
+Development Status: Early-stage development. This roadmap represents proposed milestones; timelines and expansion decisions will depend on prototype progress, pilot results, partnerships, and operational feasibility.
