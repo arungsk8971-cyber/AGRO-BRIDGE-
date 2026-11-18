@@ -1,45 +1,124 @@
-# Market Balancing Engine
+AGRO-BRIDGE — Business Model
 
-## 1. The Price Asymmetry Problem
+1. Business Overview
 
-Across Indian agricultural districts, perishable produce frequently experiences sharp same-day regional price dispersion:
-- **Surplus production clusters** (e.g., Kolar for tomatoes, Nashik for onions, Guntur for chillies, Theni for bananas) face localized gluts, pushing farm-gate prices near or below cost of cultivation.
-- **Deficit urban consumption centres** (e.g., Chennai, Bengaluru, Mumbai, Delhi NCR) simultaneously trade the same produce at 2×–3.5× higher wholesale rates due to fragmented logistics, multiple intermediary margins, and post-harvest transit spoilage.
+AGRO-BRIDGE is a technology-driven B2B agricultural procurement, storage, and distribution network designed to connect farmers directly with businesses.
+
+The business aims to reduce inefficiencies in traditional agricultural supply chains by integrating procurement, quality grading, storage, transportation, market intelligence, and bulk distribution into one connected system.
+
+Our primary customers include retailers, wholesalers, supermarkets, restaurants, and food-processing companies.
+
+2. Value Proposition
+
+For Farmers:
+
+- Direct access to multiple business buyers.
+- Transparent, daily market-linked procurement prices.
+- A/B/C quality-based produce grading.
+- Better market accessibility and organized collection.
+- Reduced dependence on fragmented intermediaries.
+
+For Buyers:
+
+- Reliable access to agricultural produce in bulk.
+- Consistent quality grading and transparent pricing.
+- Organized procurement and scheduled deliveries.
+- Reduced sourcing and coordination challenges.
+- Access to produce from multiple regions.
+
+3. Procurement Model
+
+AGRO-BRIDGE will procure agricultural produce directly from farmers.
+
+The procurement process will include:
+
+- Farmer registration and produce listing.
+- Daily market-price comparison.
+- Quality inspection and A/B/C grading.
+- Quantity verification and procurement confirmation.
+- Digital records of procurement and payments.
+
+Procurement prices will be linked to prevailing market conditions, produce quality, and buyer demand.
+
+4. Storage and Collection Infrastructure
+
+The network will operate through:
+
+- Taluk-level collection centres: Initial collection, quality verification, grading, and inventory recording.
+- District-level hubs: Larger inventory management, commodity-specific storage, and bulk distribution.
+- Commodity-specific storage: Storage methods selected according to the nature and perishability of each crop.
+
+This infrastructure will help manage supply more efficiently and reduce avoidable post-harvest losses.
+
+5. Regional Market-Balancing Model
+
+This is one of AGRO-BRIDGE's core differentiators.
+
+The platform will compare agricultural supply, demand, and market prices across different regions to identify commercially viable distribution opportunities.
+
+For example, a crop available at a lower price in one district may have higher demand and selling value in another.
+
+Before moving produce, the system will evaluate:
+
+- Procurement cost at the origin.
+- Destination market price and demand.
+- Transportation and fuel expenses.
+- Loading, unloading, and labour costs.
+- Storage and handling expenses.
+- Expected losses and other operational costs.
+
+Decision principle:
+
+Destination selling value − Total procurement and distribution costs = Expected gross margin.
+
+Produce will be transported only when the expected margin and operational conditions make the movement commercially viable.
+
+Nearby distribution may use company-operated vehicles, while longer-distance movement may use rail or logistics partners where economical.
+
+6. Revenue Model
+
+AGRO-BRIDGE plans to generate revenue through:
+
+1. Procurement and distribution margin: A controlled margin on bulk produce transactions.
+2. Logistics services: Revenue from transportation and distribution services where applicable.
+3. Storage services: Potential charges for storage and inventory-handling services.
+4. Bulk supply partnerships: Long-term supply arrangements with retailers, supermarkets, restaurants, and food processors.
+
+The business will focus on efficient operations, competitive pricing, and high-volume transactions rather than relying on large margins per unit.
+
+7. Operational Model
+
+The proposed operational workflow:
+
+Farmer → Produce Collection → Quality Grading → Procurement → Storage Hub → Market-Balancing Analysis → Transportation → B2B Buyer.
+
+Direct delivery from collection centres may also be used when it is more economical.
+
+Workers involved in collection, handling, grading, and distribution will be organized through structured operational teams. Labour, accommodation where required, and handling expenses will be included in operating-cost calculations.
+
+8. Initial Launch Strategy
+
+AGRO-BRIDGE will begin operations in one taluk.
+
+The initial objectives are to:
+
+- Onboard farmers and local suppliers.
+- Identify potential B2B buyers.
+- Establish a collection and procurement process.
+- Build initial storage and logistics partnerships.
+- Test regional price and demand comparisons.
+- Validate transaction economics and operational costs.
+
+After validating the model, the network can expand into neighbouring taluks, districts, and eventually multiple states.
+
+9. Long-Term Vision
+
+The long-term objective is to build an integrated agricultural supply-chain network connecting farmers, markets, storage infrastructure, transportation, and businesses across regions.
+
+AGRO-BRIDGE aims to evolve beyond a digital marketplace into a technology-enabled agricultural distribution and market-balancing infrastructure.
+
+Our vision is to move agricultural produce more intelligently, reduce supply-chain inefficiencies, create better market access for farmers, and deliver reliable sourcing for businesses.
 
 ---
 
-## 2. How Agro Bridge Balances Supply & Demand
-
-1. **Transparent Reference Pricing (`BASE_RATES`)**:
-   Agro Bridge publishes a daily Grade A procurement rate valid until 6:00 PM that sits consistently **above** the local surplus farm-gate price and **below** destination market wholesale prices:
-
-   | Crop | Surplus Market (Demo) | Agro Bridge Grade A | Highest Destination Market (Demo) | Market Spread |
-   | --- | --- | --- | --- | --- |
-   | Tomato | Kolar · ₹8/kg | ₹9/kg (+₹1/kg) | Chennai · ₹24/kg | ₹16/kg |
-   | Onion | Nashik · ₹14/kg | ₹15/kg (+₹1/kg) | Chennai · ₹29/kg | ₹15/kg |
-   | Potato | Agra · ₹11/kg | ₹12/kg (+₹1/kg) | Hyderabad · ₹21/kg | ₹10/kg |
-   | Chilli | Guntur · ₹62/kg | ₹68/kg (+₹6/kg) | Chennai · ₹88/kg | ₹26/kg |
-   | Banana | Theni · ₹9/kg | ₹10/kg (+₹1/kg) | Delhi · ₹30/kg | ₹21/kg |
-
-2. **Standardized Quality Grading (`GRADE_MULTIPLIERS`)**:
-   At weighing (Stage 3), produce is graded transparently rather than rejected arbitrarily:
-   - **Grade A (`1.00×`)**: Clean, sorted, unbruised, crate-packed produce.
-   - **Grade B (`0.92×`)**: Minor size or cosmetic variance.
-   - **Grade C (`0.85×`)**: Processing/secondary channel grade.
-
-3. **Hub Consolidation & Line-Haul Dispatch**:
-   Collection hubs aggregate farm-gate pickups into full-truckload (FTL) refrigerated or ventilated dispatches routed toward the highest-deficit destination cities (`Best markets for your crops`).
-
----
-
-## 3. Farmer Decision Tools & Net Realization Engine in the App
-
-- **City Price Comparison Bars**: Displays every tracked city sorted ascending, highlighting the surplus floor in green (`#2b6b32`) and peak deficit market in terracotta (`#905831`).
-- **4-Way Net Realization Engine (`calculateNetRealization`)**: Compares true expected proceeds across four pathways for the farmer's exact crop, quantity, and expected grade:
-  1. **Local Surplus Mandi**: Deducts 5% local brokerage & handling.
-  2. **Self-Transport to Peak Deficit City**: Deducts corridor freight (`₹4.8–₹8.5/kg`), destination mandi commission (`7–8%`), transit spoilage (`5–12%`), and flags `7–15 day` payment delay risk.
-  3. **Agro Bridge Farm-Gate Pickup**: Zero brokerage, zero transit spoilage deducted from farmer, plus shared milk-run bonus (`+₹0.40–₹0.80/kg`) when the village cluster meets `1,500 kg`.
-  4. **Agro Bridge Village Hub Drop**: Adds a per-kg self-drop handling credit (`+₹0.40–₹0.60/kg`) on top of the guaranteed Grade rate.
-- **Verified Buyer Reliability Intelligence (`VERIFIED_BUYERS`)**: Surfaces destination B2B buyer scorecards (on-time settlement `%`, average payout hours, rejection `%`, lots settled, and active daily kg demand).
-- **Shared Milk-Run Cluster Pools (`CLUSTER_POOLS`)**: Shows live district pooling progress toward the `1,500 kg` full-truckload threshold so smallholders capture consolidated line-haul savings.
-- **Smart Price Alerts**: Notifies farmers immediately if a destination market already meets their `₹/kg` threshold, or queues an alert for upward price movements.
+Development Status: Early-stage business model and product development. Operational infrastructure, partnerships, pricing mechanisms, and revenue assumptions will be validated through the initial pilot.
