@@ -1,318 +1,109 @@
- AGRO-BRIDGE
+# Agro Bridge
 
-Building a Smarter, Connected Agricultural Supply Chain
+**Bridging harvest to demand.**
 
-AGRO-BRIDGE is a technology-driven agricultural ecosystem designed to connect farmers, buyers, collection centres, storage facilities, and logistics providers through one integrated network.
+Agro Bridge is an editorial, farmer-first agricultural marketplace prototype built as a self-contained single-file web application (`index.html` with inline CSS, inline JavaScript, and inline SVG line-art illustrations). It demonstrates how transparent, market-linked daily pricing, doorstep pickup scheduling, A/B/C produce grading, hub-to-market tracking, digital payouts, and farm input procurement work together to reduce post-harvest wastage and middleman opacity.
 
-Our goal is to improve agricultural procurement, reduce supply-chain inefficiencies, and move agricultural produce to markets where demand and commercial value are higher.
+> **Demonstration Notice:** All crop rates, city mandi prices, lot statuses, farmer profiles, and transaction references in this application are demonstration figures stored strictly in memory.
 
 ---
 
-1. The Problem
+## Key Features
 
-Agricultural supply chains face several fundamental challenges:
+- **Zero-Friction Farmer Sign-In**: Google, Email, and 4-digit Phone OTP demo tabs with instant profile initialization.
+- **Home Dashboard (`Menu`)**: Live KPI summary (`Active lots`, `Pending payout`, `Received`, `Tomato rate`), clickable `Today’s produce rates`, action tiles, `Best markets for your crops`, `Tip of the day`, and updates feed.
+- **Book a Pickup Slot (`Sell`)**: Interactive veggie & fruit crop selector (`Tomato`, `Onion`, `Potato`, `Chilli`, `Banana`), quantity & date inputs, pickup point toggle (`Farm gate` / `Village collection point`), 2-hour time windows, quality checklist with live Grade A/B estimation hint, and Grade A/B/C rate breakdown.
+- **7-Stage Produce Tracker (`Track`)**: Visual dashed-road truck tracker, progress bar, 8 lot detail cards, quick driver/support actions, 7-step vertical journey (`Slot booked` → `Delivered & paid`), interactive demo stage advancement, and digital settlement receipt.
+- **Cross-City Market Prices (`Market`)**: Sorted ascending city price bars (surplus green, mid black, deficit terracotta), market gap vs Agro Bridge rate comparison, live extra-earnings calculator, and target price alerts.
+- **Farm Inputs Store (`Shop`)**: Category filters (`All`, `Fertilisers`, `Crop protection`, `Seeds`, `Irrigation`), product cards with inline quantity steppers, trust badges, ₹2,000 free-delivery progress bar, and 5 checkout payment methods including `Adjust from payout` balance validation.
+- **Orders, Payouts & Settings**: Combined pickup slots & material orders tables (`Next` stage demo & `Reorder`), payout method switcher (`UPI`, `Bank transfer`, `Cash at hub`) with payment references (`UPI-xxxxxx` / `IMPS-xxxxxx` / `CASH-xxxxxx`) on settled lots, and farmer account preferences.
 
-- Price Inefficiency: Farmers often lack transparent access to market prices and better purchasing opportunities.
-- Fragmented Procurement: Farmers and businesses struggle to connect directly and reliably.
-- Storage Limitations: Inadequate storage infrastructure contributes to post-harvest losses.
-- Market Imbalance: Some regions experience excess supply and lower prices, while other regions have higher demand and prices.
-- Logistics Challenges: Transportation, labour, and distribution costs make agricultural trading inefficient.
-- Limited Market Access: Small farmers often have difficulty reaching larger commercial buyers.
+---
 
-2. Our Solution
+## Screenshots
 
-AGRO-BRIDGE aims to integrate the entire agricultural supply chain into one technology-driven ecosystem.
+| Farmer Dashboard | Produce Listing (Book Slot) | Order & Lot Tracking |
+| --- | --- | --- |
+| ![Farmer Dashboard](screenshots/farmer-dashboard.png) | ![Produce Listing](screenshots/produce-listing.png) | ![Order Tracking](screenshots/order-tracking.png) |
 
-Core Features
+| Market Balancing (City Prices) | Farm Inputs Store (v1 Commerce View) |
+| --- | --- |
+| ![Market Balancing](screenshots/market-balancing.png) | ![Farm Inputs Store](screenshots/buyer-dashboard.png) |
 
-1. Direct Procurement
+> Note: `screenshots/buyer-dashboard.png` captures the v1 Farm Inputs Store checkout view from the farmer-facing build. Dedicated B2B buyer portal screens are planned in [`docs/project-roadmap.md`](docs/project-roadmap.md).
 
-- Connect farmers directly with businesses.
-- Allow farmers to list available produce.
-- Provide transparent, daily market-linked pricing.
-- Enable bulk procurement.
+---
 
-2. Quality-Based Grading
+## Repository Structure
 
-- Classify agricultural produce into A, B, and C grades.
-- Establish transparent quality-based pricing.
-- Help buyers identify produce according to their requirements.
+```text
+AGRO-BRIDGE/
+├── README.md
+├── index.html                  # Self-contained Agro Bridge web application
+├── docs/
+│   ├── system-architecture.md
+│   ├── market-balancing.md
+│   ├── business-model.md
+│   └── project-roadmap.md
+├── screenshots/
+│   ├── farmer-dashboard.png
+│   ├── buyer-dashboard.png
+│   ├── produce-listing.png
+│   ├── order-tracking.png
+│   └── market-balancing.png
+├── src/                        # Workspace starter files
+├── tests/
+│   └── agroBridge.test.ts      # Node test runner suite verifying pure app logic
+├── LICENSE
+├── CONTRIBUTING.md
+├── .gitignore
+├── .env.example
+├── package.json
+├── tsconfig.json
+└── vite.config.ts
+```
 
-3. Decentralized Storage
+---
 
-- Establish taluk-level collection centres.
-- Connect collection centres to district-level distribution hubs.
-- Organize storage according to crop type, quantity, and perishability.
+## Getting Started
 
-4. Integrated Logistics
+### Prerequisites
 
-- Coordinate transportation between farmers, collection centres, district hubs, and buyers.
-- Manage delivery schedules and booking slots.
-- Track orders and transportation.
-- Account for labour, handling, and transportation expenses.
+- Node.js 20+ (with `npm`)
 
-5. Regional Market Balancing
+### Run Locally
 
-- Compare agricultural prices across different regions.
-- Identify surplus-production and high-demand markets.
-- Calculate transportation and handling costs.
-- Identify commercially viable destinations.
-- Coordinate inter-district and interstate produce movement.
+```bash
+npm install
+npm run dev
+```
 
-3. Core Innovation: Regional Market Balancing
+Open `http://localhost:3000` in your browser. You can also open `http://localhost:3000/?autostart=1` to skip directly to the farmer dashboard.
 
-The central concept of AGRO-BRIDGE is to optimize agricultural distribution based on regional supply, demand, and economic value.
+### Build & Verify
 
-Instead of selling produce only within its production region, the system aims to identify where that produce can generate better commercial value.
+```bash
+# Run deterministic unit tests against index.html pure logic
+npx --yes tsx --test tests/agroBridge.test.ts
 
-How It Works
+# Typecheck
+npm run lint
 
-1. Regional Supply Identification: Identify districts with surplus agricultural production.
-2. Market Price Comparison: Compare crop prices across different regional markets.
-3. Demand Analysis: Identify markets with stronger buyer demand and lower local supply.
-4. Transportation Calculation: Estimate vehicle, labour, handling, storage, and transportation expenses.
-5. Profitability Analysis: Calculate the potential net realization from different destinations.
-6. Distribution Decision: Recommend the most commercially viable destination.
-7. Execution: Coordinate procurement, storage, transportation, and delivery.
+# Build self-contained dist/index.html
+npm run build
+```
 
-Example
+---
 
-Consider two regions:
+## Documentation
 
-- Region A: Coconut is available in abundance at a relatively lower price.
-- Region B: Coconut has higher demand and a better selling price.
+- [System Architecture](docs/system-architecture.md)
+- [Market Balancing Engine](docs/market-balancing.md)
+- [Business Model](docs/business-model.md)
+- [Project Roadmap](docs/project-roadmap.md)
 
-AGRO-BRIDGE evaluates whether moving coconut from Region A to Region B is economically viable.
+---
 
-The decision considers:
+## License
 
-- Purchase price at the origin.
-- Expected selling price at the destination.
-- Transportation expenses.
-- Loading and unloading costs.
-- Labour charges.
-- Storage and handling expenses.
-- Expected losses during transportation and storage.
-
-Potential Net Realization Formula:
-
-Net Realization = Destination Selling Price − Total Procurement and Distribution Costs.
-
-The system recommends moving produce only when the expected economic benefit justifies the additional costs and risks.
-
-Transportation Strategy
-
-- Local and Neighbouring Districts: Use dedicated vehicles where economically viable.
-- Multiple Districts: Optimize collection and delivery routes.
-- Interstate Distribution: Evaluate railway transportation and other bulk logistics options based on cost, transit time, and perishability.
-
-The objective is to create a market-balancing network rather than simply another agricultural marketplace.
-
-4. Technical Architecture
-
-AGRO-BRIDGE is designed around interconnected operational layers.
-
-A. Farmer Interface
-
-A simple, farmer-friendly application.
-
-Features:
-
-- Registration and login.
-- Farmer profile.
-- Produce identification.
-- Crop quantity and availability.
-- Produce listing.
-- Quality grading.
-- Daily market-linked pricing.
-- Collection booking.
-- Order status.
-- Payment tracking.
-
-B. Buyer Interface
-
-A separate interface designed for commercial buyers.
-
-Target buyers:
-
-- Retailers.
-- Wholesalers.
-- Supermarkets.
-- Restaurants.
-- Food processors.
-
-Features:
-
-- Buyer registration.
-- Browse available produce.
-- Compare prices and quality.
-- Bulk order placement.
-- Delivery scheduling.
-- Order tracking.
-- Procurement history.
-
-C. Collection Centres
-
-Taluk-level operational facilities.
-
-Responsibilities:
-
-- Receive agricultural produce.
-- Verify quantity and quality.
-- Perform grading.
-- Record inventory.
-- Organize temporary storage.
-- Coordinate transportation to district hubs or nearby buyers.
-
-D. District-Level Hubs
-
-Centralized distribution and storage facilities.
-
-Responsibilities:
-
-- Consolidate agricultural inventory.
-- Manage commodity-specific storage.
-- Monitor regional supply.
-- Coordinate bulk orders.
-- Plan inter-district distribution.
-- Connect collection centres with buyers.
-
-E. Logistics Management
-
-The logistics layer connects all operational facilities.
-
-Responsibilities:
-
-- Vehicle allocation.
-- Route planning.
-- Delivery scheduling.
-- Transportation cost calculation.
-- Shipment tracking.
-- Labour coordination.
-- Delivery confirmation.
-
-5. System Workflow
-
-The proposed operational flow:
-
-Farmer Registration → Produce Listing → Quality Verification → Price Calculation → Procurement Confirmation → Collection Centre → Inventory Management → District Hub → Market Balancing → Transportation → Buyer Delivery → Payment Settlement.
-
-The system also supports direct distribution from collection centres to nearby buyers whenever that is more efficient.
-
-6. Proposed System Architecture
-
-AGRO-BRIDGE will follow a modular architecture.
-
-Application Layer
-
-- Farmer application.
-- Buyer application.
-- Administrative dashboard.
-- Logistics management interface.
-
-Backend Layer
-
-- Authentication and user management.
-- Produce and inventory management.
-- Procurement and order management.
-- Pricing and market intelligence.
-- Market-balancing engine.
-- Storage and logistics management.
-- Payment and transaction management.
-
-Data Layer
-
-- Farmer and buyer records.
-- Agricultural commodity information.
-- Regional market prices.
-- Supply and demand records.
-- Inventory and storage information.
-- Transportation and transaction records.
-
-Intelligence Layer
-
-- Regional price comparison.
-- Supply-demand analysis.
-- Transportation cost estimation.
-- Route optimization.
-- Destination profitability calculations.
-
-The final technology stack and integrations will be selected during implementation.
-
-7. Proposed Data and Decision Flow
-
-The market-balancing engine will use information from multiple sources:
-
-1. Origin market prices.
-2. Destination market prices.
-3. Crop availability.
-4. Buyer demand.
-5. Quality and grading.
-6. Transportation costs.
-7. Storage availability.
-8. Commodity shelf life.
-
-The system will compare possible destinations and calculate expected net realization.
-
-Its purpose is to support better distribution decisions through structured data rather than relying entirely on manual market decisions.
-
-8. Business Model
-
-AGRO-BRIDGE aims to generate revenue through:
-
-- Procurement and distribution margins.
-- Bulk agricultural supply agreements.
-- Storage services.
-- Logistics and transportation services.
-- Long-term business partnerships.
-
-The proposed model focuses on maintaining competitive margins while generating revenue through efficient, high-volume operations.
-
-9. Initial Execution Strategy
-
-The initial implementation will focus on one taluk.
-
-Phase 1: Research and Validation
-
-- Identify major agricultural commodities.
-- Understand local farmer challenges.
-- Identify potential buyers.
-- Study regional price differences.
-- Evaluate collection and storage requirements.
-
-Phase 2: Prototype Development
-
-- Develop farmer and buyer interfaces.
-- Implement produce listing and procurement.
-- Build inventory and order management.
-- Develop the initial market-balancing mechanism.
-
-Phase 3: Pilot Implementation
-
-- Onboard initial farmers.
-- Establish buyer relationships.
-- Test collection and procurement operations.
-- Evaluate transportation economics.
-- Measure operational performance.
-
-Phase 4: Expansion
-
-- Expand into neighbouring taluks.
-- Establish additional district hubs.
-- Develop interstate distribution networks.
-- Improve market intelligence and logistics optimization.
-
-10. Demonstration and Product Development
-
-The project will include the following demonstration materials:
-
-- Farmer application screenshots.
-- Buyer dashboard screenshots.
-- Produce listing and grading interface.
-- Procurement and order management.
-- Collection centre workflow.
-- District hub inventory dashboard.
-- Logistics tracking interface.
-- Regional market comparison dashboard.
-- Market-balancing decision demonstration.
-
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
