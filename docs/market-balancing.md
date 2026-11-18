@@ -1,67 +1,45 @@
-AGRO-BRIDGE — Market Balancing System
+# Market Balancing Engine
 
-1. Overview
+## 1. The Price Asymmetry Problem
 
-Market balancing is a core innovation of AGRO-BRIDGE. It identifies differences in agricultural supply, demand, and prices across districts and states to determine where produce can achieve better market value.
+Across Indian agricultural districts, perishable produce frequently experiences sharp same-day regional price dispersion:
+- **Surplus production clusters** (e.g., Kolar for tomatoes, Nashik for onions, Guntur for chillies, Theni for bananas) face localized gluts, pushing farm-gate prices near or below cost of cultivation.
+- **Deficit urban consumption centres** (e.g., Chennai, Bengaluru, Mumbai, Delhi NCR) simultaneously trade the same produce at 2×–3.5× higher wholesale rates due to fragmented logistics, multiple intermediary margins, and post-harvest transit spoilage.
 
-The objective is to move surplus agricultural produce from lower-value markets to regions where demand and selling prices are higher, while ensuring transportation and distribution remain profitable.
+---
 
-2. The Problem
+## 2. How Agro Bridge Balances Supply & Demand
 
-Agricultural markets are geographically fragmented. Some regions experience excess production and lower prices, while other regions face shortages and higher prices.
+1. **Transparent Reference Pricing (`BASE_RATES`)**:
+   Agro Bridge publishes a daily Grade A procurement rate valid until 6:00 PM that sits consistently **above** the local surplus farm-gate price and **below** destination market wholesale prices:
 
-Farmers often lack access to distant markets, and businesses struggle with reliable sourcing. This creates opportunities for better coordination between producing and consuming regions.
+   | Crop | Surplus Market (Demo) | Agro Bridge Grade A | Highest Destination Market (Demo) | Market Spread |
+   | --- | --- | --- | --- | --- |
+   | Tomato | Kolar · ₹8/kg | ₹9/kg (+₹1/kg) | Chennai · ₹24/kg | ₹16/kg |
+   | Onion | Nashik · ₹14/kg | ₹15/kg (+₹1/kg) | Chennai · ₹29/kg | ₹15/kg |
+   | Potato | Agra · ₹11/kg | ₹12/kg (+₹1/kg) | Hyderabad · ₹21/kg | ₹10/kg |
+   | Chilli | Guntur · ₹62/kg | ₹68/kg (+₹6/kg) | Chennai · ₹88/kg | ₹26/kg |
+   | Banana | Theni · ₹9/kg | ₹10/kg (+₹1/kg) | Delhi · ₹30/kg | ₹21/kg |
 
-3. How AGRO-BRIDGE Works
+2. **Standardized Quality Grading (`GRADE_MULTIPLIERS`)**:
+   At weighing (Stage 3), produce is graded transparently rather than rejected arbitrarily:
+   - **Grade A (`1.00×`)**: Clean, sorted, unbruised, crate-packed produce.
+   - **Grade B (`0.92×`)**: Minor size or cosmetic variance.
+   - **Grade C (`0.85×`)**: Processing/secondary channel grade.
 
-The proposed system follows five steps:
+3. **Hub Consolidation & Line-Haul Dispatch**:
+   Collection hubs aggregate farm-gate pickups into full-truckload (FTL) refrigerated or ventilated dispatches routed toward the highest-deficit destination cities (`Best markets for your crops`).
 
-1. Supply identification: Identify crops, available quantities, quality, and procurement prices in different regions.
-2. Price comparison: Compare origin market prices with potential destination prices.
-3. Demand analysis: Identify buyers, required quantities, and destination demand.
-4. Cost calculation: Calculate procurement, transportation, labour, storage, handling, and expected losses.
-5. Distribution recommendation: Identify the most commercially viable destination and coordinate transportation when the opportunity is profitable.
+---
 
-4. Example
+## 3. Farmer Decision Tools & Net Realization Engine in the App
 
-A hypothetical opportunity for moving produce between two districts:
-
-Particulars| Cost per kg
-Origin procurement price| ₹20
-Destination selling price| ₹35
-Transportation| ₹4
-Labour and handling| ₹2
-Storage and other costs| ₹2
-Expected gross margin| ₹7
-
-Calculation: ₹35 − (₹20 + ₹4 + ₹2 + ₹2) = ₹7 per kg.
-
-These figures are illustrative, not actual market prices. Real decisions will depend on verified prices, buyer demand, quantities, and operating costs.
-
-5. Transportation Strategy
-
-- Nearby districts: Company-operated vehicles or local transport partners.
-- Multiple states: Rail transportation or logistics partners where cost-effective.
-- Bulk distribution: Consolidated shipments to improve transportation efficiency.
-
-The system will consider distance, delivery time, quantity, and total cost before recommending transportation.
-
-6. Technology Approach
-
-The proposed platform will combine regional price information, crop availability, buyer demand, inventory, and logistics costs.
-
-It will calculate expected margins and recommend suitable destination markets. As operations expand, historical data can support better price analysis and demand forecasting.
-
-7. Implementation Strategy
-
-- Phase 1: Validate regional price differences and buyer demand within one taluk and nearby markets.
-- Phase 2: Connect multiple districts through collection centres and distribution hubs.
-- Phase 3: Expand inter-state distribution using larger logistics networks and improved market intelligence.
-
-8. Long-Term Vision
-
-AGRO-BRIDGE aims to build an integrated agricultural market-balancing network that connects surplus-producing regions with demand centres.
-
-The goal is to make agricultural distribution more intelligent, improve market access for farmers, provide reliable sourcing for businesses, and reduce supply-chain inefficiencies.
-
-Development Status: Proposed system. Market data, cost calculations, and distribution recommendations will be validated through pilot operations.
+- **City Price Comparison Bars**: Displays every tracked city sorted ascending, highlighting the surplus floor in green (`#2b6b32`) and peak deficit market in terracotta (`#905831`).
+- **4-Way Net Realization Engine (`calculateNetRealization`)**: Compares true expected proceeds across four pathways for the farmer's exact crop, quantity, and expected grade:
+  1. **Local Surplus Mandi**: Deducts 5% local brokerage & handling.
+  2. **Self-Transport to Peak Deficit City**: Deducts corridor freight (`₹4.8–₹8.5/kg`), destination mandi commission (`7–8%`), transit spoilage (`5–12%`), and flags `7–15 day` payment delay risk.
+  3. **Agro Bridge Farm-Gate Pickup**: Zero brokerage, zero transit spoilage deducted from farmer, plus shared milk-run bonus (`+₹0.40–₹0.80/kg`) when the village cluster meets `1,500 kg`.
+  4. **Agro Bridge Village Hub Drop**: Adds a per-kg self-drop handling credit (`+₹0.40–₹0.60/kg`) on top of the guaranteed Grade rate.
+- **Verified Buyer Reliability Intelligence (`VERIFIED_BUYERS`)**: Surfaces destination B2B buyer scorecards (on-time settlement `%`, average payout hours, rejection `%`, lots settled, and active daily kg demand).
+- **Shared Milk-Run Cluster Pools (`CLUSTER_POOLS`)**: Shows live district pooling progress toward the `1,500 kg` full-truckload threshold so smallholders capture consolidated line-haul savings.
+- **Smart Price Alerts**: Notifies farmers immediately if a destination market already meets their `₹/kg` threshold, or queues an alert for upward price movements.

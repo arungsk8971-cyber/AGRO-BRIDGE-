@@ -10,13 +10,14 @@ Agro Bridge is an editorial, farmer-first agricultural marketplace prototype bui
 
 ## Key Features
 
-- **Zero-Friction Farmer Sign-In**: Google, Email, and 4-digit Phone OTP demo tabs with instant profile initialization.
-- **Home Dashboard (`Menu`)**: Live KPI summary (`Active lots`, `Pending payout`, `Received`, `Tomato rate`), clickable `Today’s produce rates`, action tiles, `Best markets for your crops`, `Tip of the day`, and updates feed.
-- **Book a Pickup Slot (`Sell`)**: Interactive veggie & fruit crop selector (`Tomato`, `Onion`, `Potato`, `Chilli`, `Banana`), quantity & date inputs, pickup point toggle (`Farm gate` / `Village collection point`), 2-hour time windows, quality checklist with live Grade A/B estimation hint, and Grade A/B/C rate breakdown.
-- **7-Stage Produce Tracker (`Track`)**: Visual dashed-road truck tracker, progress bar, 8 lot detail cards, quick driver/support actions, 7-step vertical journey (`Slot booked` → `Delivered & paid`), interactive demo stage advancement, and digital settlement receipt.
-- **Cross-City Market Prices (`Market`)**: Sorted ascending city price bars (surplus green, mid black, deficit terracotta), market gap vs Agro Bridge rate comparison, live extra-earnings calculator, and target price alerts.
-- **Farm Inputs Store (`Shop`)**: Category filters (`All`, `Fertilisers`, `Crop protection`, `Seeds`, `Irrigation`), product cards with inline quantity steppers, trust badges, ₹2,000 free-delivery progress bar, and 5 checkout payment methods including `Adjust from payout` balance validation.
-- **Orders, Payouts & Settings**: Combined pickup slots & material orders tables (`Next` stage demo & `Reorder`), payout method switcher (`UPI`, `Bank transfer`, `Cash at hub`) with payment references (`UPI-xxxxxx` / `IMPS-xxxxxx` / `CASH-xxxxxx`) on settled lots, and farmer account preferences.
+- **Zero-Friction Farmer Sign-In**: Google, Email, and validated 4-digit Phone OTP demo tabs with instant profile initialization.
+- **Multilingual Header & Settings (`EN`, `ಕನ್ನಡ`, `हिन्दी`, `தமிழ்`)**: Instant UI localization across navigation, screens, KPIs, and primary actions.
+- **Home Dashboard (`Menu`)**: Live KPI summary (`Active lots`, `Net pending` after input deductions, `Received`, dynamic crop rate), clickable `Today’s produce rates`, action tiles, `Best markets for your crops`, crop-specific tips, and live updates feed.
+- **Book a Pickup Slot (`Sell`)**: Interactive veggie & fruit crop selector (`Tomato`, `Onion`, `Potato`, `Chilli`, `Banana`), quantity (`≥50 kg`) & future-date validation, pickup point toggle (`Farm gate` / `Village collection point` hub drop credit), **Shared Milk-Run Cluster Pool** bonus progress (`1,500 kg` FTL threshold), quality checklist with live Grade A/B/C & Net Realization preview.
+- **7-Stage Produce Tracker (`Track`)**: Visual dashed-road truck tracker, matched verified destination buyer, deterministic checklist-backed grading at Stage 3 with **Weighbridge & Quality Grading Evidence** (`Passed`/`Missed` audit + `Request grade review` dispute action), milk-run bonus tracking, and digital settlement receipt.
+- **Net Realization Engine & Market Prices (`Market`)**: Sorted ascending city price bars (surplus green, mid black, deficit terracotta), **4-way Net Realization comparison** (Local Mandi vs Self-Transport vs Agro Bridge Farm Gate vs Agro Bridge Hub Drop after freight, commission, and spoilage), **Verified Destination Buyers** reliability scorecards, live calculator, and smart price alerts.
+- **Farm Inputs Store (`Shop`)**: Category filters, inline quantity steppers, `₹2,000` free-delivery progress bar, and **Adjust from payout** credit ledger tracking (`Gross pending − Prior input deductions`) preventing double-spending.
+- **Orders, Payouts & Settings**: Combined pickup slots & material orders tables, payout ledger with **Net Pending Payable** and **Estimate Accuracy** calibration (`%` predicted vs. settled), and validated `UPI` / `Bank transfer` (IFSC + 9–18 digit account) settings.
 
 ---
 
@@ -26,7 +27,7 @@ Agro Bridge is an editorial, farmer-first agricultural marketplace prototype bui
 | --- | --- | --- |
 | ![Farmer Dashboard](screenshots/farmer-dashboard.png) | ![Produce Listing](screenshots/produce-listing.png) | ![Order Tracking](screenshots/order-tracking.png) |
 
-| Market Balancing (City Prices) | Farm Inputs Store (v1 Commerce View) |
+| Market Balancing & Net Realization | Farm Inputs Store (v1 Commerce View) |
 | --- | --- |
 | ![Market Balancing](screenshots/market-balancing.png) | ![Farm Inputs Store](screenshots/buyer-dashboard.png) |
 

@@ -129,3 +129,89 @@ test('Veggie & fruit icons and free-delivery remaining helpers work properly', (
   assert.equal(ctx.getFreeDeliveryRemaining(2000), 0);
   assert.equal(ctx.getFreeDeliveryRemaining(2500), 0);
 });
+
+test('Adjust-from-payout deductions prevent double spending across orders', () => {
+  const lots = ctx.state.lots; // AB-2291 has 10,800 pending
+  assert.equal(ctx.getAvailablePendingPayout(lots, []), 10800);
+
+  const orders = [
+    { id: 'ORD-410', total: 4500, pm: 'Adjust from payout' },
+    { id: 'ORD-411', total: 1200, pm: 'UPI' }
+  ];
+  // Only Adjust-from-payout orders reduce available payout credit
+  assert.equal(ctx.getPayoutAdjustedTotal(orders), 4500);
+  assert.equal(ctx.getAvailablePendingPayout(lots, orders), 6300);
+  assert.equal(ctx.canAdjustFromPayout(6300, ctx.getAvailablePendingPayout(lots, orders)), true);
+  assert.equal(ctx.canAdjustFromPayout(6301, ctx.getAvailablePendingPayout(lots, orders)), false);
+});
+
+test('Net Realization Engine compares local mandi, self-haul, and Agro Bridge channels', () => {
+  const res = ctx.calculateNetRealization('Tomato', 1000, 4);
+  assert.equal(res.expectedGrade, 'A');
+  assert.equal(res.options.length, 4);
+
+  const local = res.options.find((o: any) => o.id === 'local_mandi');
+  const selfHaul = res.options.find((o: any) => o.id === 'self_haul');
+  const abGate = res.options.find((o: any) => o.id === 'agro_gate');
+  const abHub = res.options.find((o: any) => o.id === 'agro_hub');
+
+  // Local Kolar ₹8/kg * 1000 = 8000 minus 5% (400) = 7600
+  assert.equal(local.netTotal, 7600);
+  // Self-haul Chennai ₹24/kg * 1000 = 24000 minus 5500 freight - 1920 commission - 2400 spoilage = 14180
+  assert.equal(selfHaul.netTotal, 14180);
+  // Agro Bridge Farm Gate: ₹9 * 1000 + ₹500 cluster bonus (1100 + 1000 >= 1500) = 9500
+  assert.equal(abGate.netTotal, 9500);
+  // Agro Bridge Hub Drop: ₹9 * 1000 + ₹400 drop credit + ₹500 cluster bonus = 9900
+  assert.equal(abHub.netTotal, 9900);
+  assert.ok(abGate.netTotal > local.netTotal);
+});
+
+test('Deterministic checklist grading and milk-run cluster pool calculations work', () => {
+  const gradeA = ctx.gradeLotFromChecklist('Tomato', ['Dry and clean', 'Sorted by size', 'No bruising']);
+  assert.equal(gradeA.grade, 'A');
+  assert.equal(gradeA.rate, 9);
+  assert.deepEqual(Array.from(gradeA.missingItems), ['Packed in crates']);
+
+  const gradeB = ctx.gradeLotFromChecklist('Tomato', ['Dry and clean', 'Sorted by size']);
+  assert.equal(gradeB.grade, 'B');
+  assert.equal(gradeB.rate, 8);
+
+  const gradeC = ctx.gradeLotFromChecklist('Tomato', ['Dry and clean']);
+  assert.equal(gradeC.grade, 'C');
+
+  // Tomato existing pool = 1100, target = 1500
+  const locked = ctx.getClusterPoolStatus('Tomato', 300);
+  assert.equal(locked.unlocked, false);
+  assert.equal(locked.remainingToUnlock, 100);
+  assert.equal(locked.bonusTotal, 0);
+
+  const unlocked = ctx.getClusterPoolStatus('Tomato', 500);
+  assert.equal(unlocked.unlocked, true);
+  assert.equal(unlocked.bonusTotal, 250);
+});
+
+test('Validation rules, forecast accuracy calibration, and translations work', () => {
+  assert.equal(ctx.validateOtpCode('1234'), true);
+  assert.equal(ctx.validateOtpCode('12'), false);
+  assert.equal(ctx.validateOtpCode('abcd'), false);
+
+  assert.equal(ctx.isValidEmail('ramesh@farm.in'), true);
+  assert.equal(ctx.isValidEmail('not-an-email'), false);
+
+  assert.equal(ctx.isValidPickupDate('2020-01-01', '2026-11-17'), false);
+  assert.equal(ctx.isValidPickupDate('2026-11-18', '2026-11-17'), true);
+
+  assert.equal(ctx.validateSettingsForm({ profileName: 'Ramesh', payoutMethod: 'UPI', upi: 'bad' }).ok, false);
+  assert.equal(ctx.validateSettingsForm({ profileName: 'Ramesh', payoutMethod: 'UPI', upi: 'ramesh@okicici' }).ok, true);
+  assert.equal(ctx.validateSettingsForm({ profileName: 'Ramesh', payoutMethod: 'Bank transfer', account: '123', ifsc: 'BAD' }).ok, false);
+  assert.equal(ctx.validateSettingsForm({ profileName: 'Ramesh', payoutMethod: 'Bank transfer', account: '309482714928', ifsc: 'SBIN0004192' }).ok, true);
+
+  const acc = ctx.getForecastAccuracyStats(ctx.state.lots);
+  assert.equal(acc.count, 1);
+  assert.equal(acc.avgAccuracyPct, 100);
+
+  assert.equal(ctx.t('navMenu', 'Menu', 'ಕನ್ನಡ'), 'ಮುಖಪುಟ');
+  assert.equal(ctx.t('navSell', 'Sell', 'हिन्दी'), 'बेचें');
+  assert.equal(ctx.t('navMarket', 'Market', 'தமிழ்'), 'சந்தை');
+});
+

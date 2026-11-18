@@ -1,82 +1,32 @@
-AGRO-BRIDGE — Project Roadmap
+# Project Roadmap
 
-1. Vision
+## Phase 1 — Farmer-Facing Editorial Prototype & Core Differentiation (Completed)
+- [x] Self-contained single-file HTML/CSS/JS build with offline-friendly inline SVG illustrations and veggie/fruit crop icons.
+- [x] Farmer onboarding flows (Google, Email, validated 4-digit Phone OTP demo).
+- [x] Pickup slot booking with crop picker cards, milk-run cluster pooling (`1,500 kg` FTL bonus), quality checklist estimator, and Net Realization preview.
+- [x] 7-stage produce tracker with matched verified buyer, deterministic checklist-backed grading evidence, dispute/grade review flag, and digital settlement receipt.
+- [x] 4-way Net Realization Engine, city market price bars, Verified Destination Buyer reliability cards, and smart price alerts.
+- [x] Farm inputs store with cart stepper, ₹2,000 free-delivery progress, and double-spend-guarded `Adjust from payout` credit ledger.
+- [x] Estimate vs. settled Forecast Calibration tracking and interactive multilingual UI toggle (`English`, `ಕನ್ನಡ`, `हिन्दी`, `தமிழ்`).
+- [x] Automated unit test suite (`tests/agroBridge.test.ts`, 11 tests) and headless browser verification.
 
-Build a technology-driven agricultural supply-chain network that connects farmers, buyers, storage infrastructure, and logistics through an integrated platform.
+---
 
-2. Phase 1 — Platform Development
+## Phase 2 — Persistent Backend & Digital Weighbridge Integration
+- [ ] REST/WebSocket API backend with persistent database storage for lots, hubs, verified buyer scorecards, and farmer profiles.
+- [ ] Real SMS OTP verification and full deep-copy vernacular localization across all tables and receipts.
+- [ ] Collection-hub operator tablet view for barcode crate scanning, digital scale integration, and photo-verified A/B/C grading.
+- [ ] Automated UPI & IMPS payout disbursement via payment gateway webhooks with idempotent settlement reconciliation.
 
-Objective: Build the initial working product.
+---
 
-- Develop separate farmer and buyer interfaces.
-- Implement user registration and account management.
-- Enable produce listings with quantity, quality, and pricing.
-- Add A/B/C quality grading.
-- Implement buyer ordering and booking workflows.
-- Develop order and delivery tracking.
-- Establish the initial technical architecture.
+## Phase 3 — B2B Buyer Portal & Dynamic Dispatch Optimization
+- [ ] Dedicated **Buyer Dashboard** for wholesale mandis, modern retail chains, and food processors to bid on or reserve incoming Grade A/B/C hub inventory.
+- [ ] Demand-forecasting and dynamic route balancing engine matching district harvest surpluses to deficit-city buyer commitments.
+- [ ] Cold-storage capacity utilization tracking and automated backhaul scheduling for farm input deliveries.
 
-3. Phase 2 — Market Intelligence
+---
 
-Objective: Develop the market-balancing system.
-
-- Collect regional crop-price information.
-- Identify surplus and shortage regions.
-- Compare prices across different markets.
-- Record buyer demand and required quantities.
-- Calculate procurement and distribution costs.
-- Develop destination recommendations based on expected margins.
-
-4. Phase 3 — Initial Pilot
-
-Objective: Validate the business model in one taluk.
-
-- Onboard local farmers.
-- Identify and onboard B2B buyers.
-- Establish a collection-centre process.
-- Test quality inspection and procurement.
-- Build initial storage and logistics partnerships.
-- Conduct trial deliveries.
-- Measure costs, margins, delivery performance, and customer feedback.
-
-5. Phase 4 — District Expansion
-
-Objective: Establish a connected regional network.
-
-- Expand farmer and buyer participation.
-- Establish additional collection centres.
-- Introduce district-level storage hubs.
-- Improve inventory and logistics management.
-- Expand regional market-price comparisons.
-- Optimize transportation and distribution.
-
-6. Phase 5 — Multi-State Expansion
-
-Objective: Build a larger agricultural distribution network.
-
-- Connect agricultural markets across states.
-- Develop inter-state logistics partnerships.
-- Introduce demand forecasting and advanced market intelligence.
-- Improve storage and distribution infrastructure.
-- Build long-term partnerships with large-scale buyers.
-
-7. Key Success Indicators
-
-The project will measure progress through:
-
-- Number of active farmers and buyers.
-- Quantity of produce procured and distributed.
-- Farmer price realization.
-- Procurement and delivery costs.
-- Storage and spoilage losses.
-- Order fulfilment and delivery reliability.
-- Gross margin per transaction.
-- Number of successful interregional transactions.
-
-8. Long-Term Goal
-
-Transform AGRO-BRIDGE into an integrated agricultural infrastructure network that intelligently coordinates procurement, storage, market demand, and transportation.
-
-The ultimate goal is to make agricultural trade more transparent, efficient, accessible, and scalable.
-
-Development Status: Early-stage development. This roadmap represents proposed milestones; timelines and expansion decisions will depend on prototype progress, pilot results, partnerships, and operational feasibility.
+## Phase 4 — Financial Inclusion & Advisory
+- [ ] Historical yield & grade analytics per farmer to unlock low-interest seasonal input credit.
+- [ ] Hyperlocal weather and harvest-window advisories integrated into pickup slot recommendations.

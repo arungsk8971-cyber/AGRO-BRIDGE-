@@ -1733,6 +1733,110 @@
       pointer-events: none;
     }
 
+    .lang-switch {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px;
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid var(--white);
+      border-radius: 999px;
+    }
+
+    .lang-btn {
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 10px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background-color 0.18s ease, color 0.18s ease;
+    }
+
+    .lang-btn.active {
+      background: var(--ink);
+      color: var(--white);
+    }
+
+    .net-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .net-card {
+      background: rgba(255, 255, 255, 0.90);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .net-card.recommended {
+      border: 2px solid var(--accent);
+      background: #ffffff;
+    }
+
+    .net-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: var(--muted);
+      gap: 8px;
+    }
+
+    .net-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding-top: 8px;
+      border-top: 1px solid var(--line);
+      margin-top: auto;
+    }
+
+    .cluster-banner {
+      background: rgba(241, 227, 211, 0.55);
+      border: 1px solid rgba(144, 88, 49, 0.35);
+      border-radius: 20px;
+      padding: 14px 16px;
+      margin-bottom: 18px;
+    }
+
+    .buyer-card {
+      background: rgba(255, 255, 255, 0.88);
+      border: 1px solid var(--white);
+      border-radius: 20px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .evidence-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .evidence-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.85);
+      border: 1px solid var(--line);
+      font-size: 13px;
+      font-weight: 500;
+    }
+
     /* Responsive breakpoints */
     @media (max-width: 860px) {
       .top-nav {
@@ -1756,6 +1860,9 @@
       .nav-pill {
         display: none;
       }
+      .lang-switch {
+        display: none;
+      }
       .mobile-tab-bar.visible {
         display: flex;
       }
@@ -1763,7 +1870,7 @@
         padding: 22px 18px;
         border-radius: 28px;
       }
-      .grid-2, .grid-4, .stats-strip {
+      .grid-2, .grid-4, .stats-strip, .net-grid, .evidence-grid {
         grid-template-columns: 1fr;
       }
       .crop-picker-grid {
@@ -1896,6 +2003,95 @@
       { id: 7, name: 'Drip irrigation line', pack: '50 m', category: 'Irrigation', price: 950, icon: 'drip' }
     ];
 
+    const CORRIDOR_MODELS = {
+      Tomato: { distanceKm: 320, freightPerKg: 5.5, hubDropBonus: 0.4, localMandiFeePct: 0.05, selfCommissionPct: 0.08, selfSpoilagePct: 0.10, paymentDelayDays: '7–12 days' },
+      Onion: { distanceKm: 780, freightPerKg: 6.2, hubDropBonus: 0.4, localMandiFeePct: 0.05, selfCommissionPct: 0.08, selfSpoilagePct: 0.06, paymentDelayDays: '10–15 days' },
+      Potato: { distanceKm: 640, freightPerKg: 4.8, hubDropBonus: 0.4, localMandiFeePct: 0.05, selfCommissionPct: 0.07, selfSpoilagePct: 0.05, paymentDelayDays: '7–10 days' },
+      Chilli: { distanceKm: 420, freightPerKg: 7.0, hubDropBonus: 0.6, localMandiFeePct: 0.05, selfCommissionPct: 0.08, selfSpoilagePct: 0.07, paymentDelayDays: '10–14 days' },
+      Banana: { distanceKm: 920, freightPerKg: 8.5, hubDropBonus: 0.5, localMandiFeePct: 0.05, selfCommissionPct: 0.08, selfSpoilagePct: 0.12, paymentDelayDays: '7–12 days' }
+    };
+
+    const VERIFIED_BUYERS = {
+      Tomato: [
+        { name: 'Sri Murugan Fresh Retail', city: 'Chennai', onTimePct: 99.1, avgHours: 4, rejectionPct: 0.6, lotsSettled: 142, demandKg: 4500 },
+        { name: 'Deccan HoReCa Supply', city: 'Bengaluru', onTimePct: 97.8, avgHours: 6, rejectionPct: 1.1, lotsSettled: 98, demandKg: 3200 }
+      ],
+      Onion: [
+        { name: 'Southern Spice & Staples', city: 'Chennai', onTimePct: 98.4, avgHours: 5, rejectionPct: 0.5, lotsSettled: 116, demandKg: 6000 },
+        { name: 'Metro Basket Procurement', city: 'Bengaluru', onTimePct: 97.2, avgHours: 8, rejectionPct: 0.9, lotsSettled: 84, demandKg: 4000 }
+      ],
+      Potato: [
+        { name: 'Kaveri Agro Processors', city: 'Hyderabad', onTimePct: 98.9, avgHours: 5, rejectionPct: 0.4, lotsSettled: 129, demandKg: 5200 },
+        { name: 'NorthGate Fresh Mart', city: 'Delhi NCR', onTimePct: 96.5, avgHours: 9, rejectionPct: 1.2, lotsSettled: 74, demandKg: 3800 }
+      ],
+      Chilli: [
+        { name: 'Coromandel Spice Mills', city: 'Chennai', onTimePct: 99.3, avgHours: 4, rejectionPct: 0.3, lotsSettled: 88, demandKg: 2400 }
+      ],
+      Banana: [
+        { name: 'Capital Fruit Ripening Hub', city: 'Delhi NCR', onTimePct: 97.6, avgHours: 6, rejectionPct: 1.4, lotsSettled: 91, demandKg: 4800 },
+        { name: 'Sahyadri Fresh Direct', city: 'Mumbai', onTimePct: 98.1, avgHours: 5, rejectionPct: 0.8, lotsSettled: 105, demandKg: 3600 }
+      ]
+    };
+
+    const CLUSTER_POOLS = {
+      Tomato: { hub: 'Malur Kolar Hub', existingKg: 1100, targetKg: 1500, bonusPerKg: 0.5 },
+      Onion: { hub: 'Nashik East Hub', existingKg: 1250, targetKg: 1500, bonusPerKg: 0.5 },
+      Potato: { hub: 'Agra Cold Hub', existingKg: 1000, targetKg: 1500, bonusPerKg: 0.4 },
+      Chilli: { hub: 'Guntur Yard Hub', existingKg: 900, targetKg: 1500, bonusPerKg: 0.8 },
+      Banana: { hub: 'Theni Packhouse', existingKg: 1200, targetKg: 1500, bonusPerKg: 0.5 }
+    };
+
+    const CROP_TIPS = {
+      Tomato: 'Sort tomatoes by size and pack them in ventilated crates before pickup—clean, unbruised produce consistently qualifies for Grade A rates.',
+      Onion: 'Cure harvested onions in shade for 2–3 days so outer skins dry firmly; dry-neck bulbs avoid moisture deductions at weighbridge.',
+      Potato: 'Brush off loose field soil and separate cut tubers before bagging to preserve Grade A realization and cold-storage shelf life.',
+      Chilli: 'Keep stems intact and dry pods evenly below 12% moisture to lock in top export-grade pricing.',
+      Banana: 'Wrap banana hands with foam separators inside crates to prevent latex staining and transit bruising.'
+    };
+
+    const TRANSLATIONS = {
+      English: {
+        navMenu: 'Menu', navSell: 'Sell', navTrack: 'Track', navMarket: 'Market', navShop: 'Shop',
+        heroMenu: 'Your farm, simplified.',
+        heroSell: 'Book a pickup slot.',
+        heroTrack: 'Track your produce.',
+        heroMarket: 'Today’s mandi rates.',
+        heroShop: 'Farm inputs store.',
+        kpiActive: 'Active lots', kpiPending: 'Net pending', kpiReceived: 'Received',
+        btnConfirmSlot: 'Confirm slot', btnPlaceOrder: 'Place order'
+      },
+      'ಕನ್ನಡ': {
+        navMenu: 'ಮುಖಪುಟ', navSell: 'ಮಾರಾಟ', navTrack: 'ಟ್ರ್ಯಾಕ್', navMarket: 'ಮಾರುಕಟ್ಟೆ', navShop: 'ಅಂಗಡಿ',
+        heroMenu: 'ನಿಮ್ಮ ಕೃಷಿ, ಸರಳವಾಗಿ.',
+        heroSell: 'ಪಿಕಪ್ ಸ್ಲಾಟ್ ಬುಕ್ ಮಾಡಿ.',
+        heroTrack: 'ಬೆಳೆ ಸಾಗಣೆ ಟ್ರ್ಯಾಕ್ ಮಾಡಿ.',
+        heroMarket: 'ಇಂದಿನ ಮಾರುಕಟ್ಟೆ ದರಗಳು.',
+        heroShop: 'ಕೃಷಿ ಸಾಮಗ್ರಿ ಮಳಿಗೆ.',
+        kpiActive: 'ಸಕ್ರಿಯ ಲಾಟ್‌ಗಳು', kpiPending: 'ಬಾಕಿ ಪಾವತಿ', kpiReceived: 'ಪಡೆದ ಮೊತ್ತ',
+        btnConfirmSlot: 'ಸ್ಲಾಟ್ ದೃಢೀಕರಿಸಿ', btnPlaceOrder: 'ಆರ್ಡರ್ ಮಾಡಿ'
+      },
+      'हिन्दी': {
+        navMenu: 'होम', navSell: 'बेचें', navTrack: 'ट्रैक', navMarket: 'मंडी भाव', navShop: 'दुकान',
+        heroMenu: 'आपकी खेती, सरल रूप में।',
+        heroSell: 'पिकअप स्लॉट बुक करें।',
+        heroTrack: 'अपनी उपज ट्रैक करें।',
+        heroMarket: 'आज के मंडी भाव।',
+        heroShop: 'कृषि सामग्री स्टोर।',
+        kpiActive: 'सक्रिय लॉट', kpiPending: 'शेष भुगतान', kpiReceived: 'प्राप्त राशि',
+        btnConfirmSlot: 'स्लॉट पक्का करें', btnPlaceOrder: 'ऑर्डर करें'
+      },
+      'தமிழ்': {
+        navMenu: 'முகப்பு', navSell: 'விற்பனை', navTrack: 'கண்காணி', navMarket: 'சந்தை', navShop: 'கடை',
+        heroMenu: 'உங்கள் விவசாயம், எளிதாக.',
+        heroSell: 'பிக்அப் நேரம் பதிவு செய்யுங்கள்.',
+        heroTrack: 'பயிர் பயணத்தை கண்காணிக்கவும்.',
+        heroMarket: 'இன்றைய சந்தை விலைகள்.',
+        heroShop: 'விவசாய பொருட்கள் கடை.',
+        kpiActive: 'செயலில் உள்ள லாட்கள்', kpiPending: 'நிலுவை தொகை', kpiReceived: 'பெற்ற தொகை',
+        btnConfirmSlot: 'நேரத்தை உறுதி செய்', btnPlaceOrder: 'ஆர்டர் செய்'
+      }
+    };
+
     const DRIVERS = [
       { driver: 'Manjunath Gowda', vehicle: 'KA-07-AG-4182' },
       { driver: 'Suresh Patil', vehicle: 'KA-40-AB-2914' },
@@ -1923,6 +2119,16 @@
     // =========================================================================
     // PURE HELPER & CALCULATION LOGIC (unit-tested directly)
     // =========================================================================
+    function t(key, fallback, langOverride) {
+      const lang = langOverride || (typeof state !== 'undefined' && state.language) || 'English';
+      const dict = TRANSLATIONS[lang] || TRANSLATIONS.English;
+      return dict[key] || TRANSLATIONS.English[key] || fallback || key;
+    }
+
+    function jsArg(val) {
+      return escapeHtml(JSON.stringify(val));
+    }
+
     function formatINR(amount) {
       const n = Math.round(Number(amount) || 0);
       return '₹' + n.toLocaleString('en-IN');
@@ -1936,7 +2142,9 @@
 
     function calculateLotPayout(lot) {
       if (!lot || lot.stage < 3 || !lot.grade || !lot.price) return 0;
-      return Math.round(Number(lot.qty) * Number(lot.price));
+      const baseAmount = Math.round(Number(lot.qty) * Number(lot.price));
+      const bonus = Math.round(Number(lot.clusterBonus) || 0);
+      return baseAmount + bonus;
     }
 
     function getPaymentStatus(lot) {
@@ -1972,6 +2180,43 @@
       return 'Tick what applies to estimate your grade.';
     }
 
+    function gradeLotFromChecklist(crop, checklist) {
+      const items = Array.isArray(checklist) ? checklist : [];
+      const count = items.length;
+      const grade = count >= 3 ? 'A' : (count === 2 ? 'B' : 'C');
+      const rate = getGradeRate(crop, grade);
+      const missingItems = QUALITY_CHECKS.filter(q => !items.includes(q));
+      const reason = count >= 3
+        ? `Passed ${count}/4 quality checks (${items.join(', ')})`
+        : `Assigned Grade ${grade} because ${missingItems.join(', ').toLowerCase()} ${missingItems.length === 1 ? 'was' : 'were'} not verified`;
+      return {
+        grade,
+        rate,
+        checkedItems: items.slice(),
+        missingItems,
+        reason
+      };
+    }
+
+    function getClusterPoolStatus(crop, qtyKg) {
+      const pool = CLUSTER_POOLS[crop] || { hub: 'District Hub', existingKg: 900, targetKg: 1500, bonusPerKg: 0.5 };
+      const qty = Math.max(0, Number(qtyKg) || 0);
+      const combinedKg = pool.existingKg + qty;
+      const unlocked = qty > 0 && combinedKg >= pool.targetKg;
+      const bonusTotal = unlocked ? Math.round(qty * pool.bonusPerKg) : 0;
+      const remainingToUnlock = Math.max(0, pool.targetKg - combinedKg);
+      return {
+        hub: pool.hub,
+        existingKg: pool.existingKg,
+        targetKg: pool.targetKg,
+        combinedKg,
+        bonusPerKg: pool.bonusPerKg,
+        unlocked,
+        bonusTotal,
+        remainingToUnlock
+      };
+    }
+
     function getMarketStats(crop) {
       const list = (MARKET_PRICES[crop] || []).slice().sort((a, b) => a.price - b.price);
       const minEntry = list[0] || { city: '', state: '', price: 0 };
@@ -1991,6 +2236,93 @@
       const stats = getMarketStats(crop);
       const safeQty = Math.max(0, Number(qty) || 0);
       return Math.round(stats.aboveFarmGate * safeQty);
+    }
+
+    function calculateNetRealization(crop, qtyKg, checkedCount) {
+      const qty = Math.max(0, Number(qtyKg) || 0);
+      const stats = getMarketStats(crop);
+      const model = CORRIDOR_MODELS[crop] || CORRIDOR_MODELS.Tomato;
+      const expectedGrade = (Number(checkedCount) || 0) >= 3 ? 'A' : ((Number(checkedCount) || 0) === 2 ? 'B' : 'C');
+      const agroRate = getGradeRate(crop, expectedGrade);
+      const pool = getClusterPoolStatus(crop, qty);
+
+      // 1. Local surplus mandi (5% brokerage/weighing fee)
+      const localGross = qty * stats.minEntry.price;
+      const localFees = Math.round(localGross * model.localMandiFeePct);
+      const localNet = Math.round(localGross - localFees);
+
+      // 2. Self-haul to highest deficit city
+      const selfGross = qty * stats.maxEntry.price;
+      const selfFreight = Math.round(qty * model.freightPerKg);
+      const selfCommission = Math.round(selfGross * model.selfCommissionPct);
+      const selfSpoilage = Math.round(selfGross * model.selfSpoilagePct);
+      const selfNet = Math.round(selfGross - selfFreight - selfCommission - selfSpoilage);
+
+      // 3. Agro Bridge Farm-Gate (0% brokerage, 0% transit spoilage, + cluster bonus if unlocked)
+      const abFarmGateNet = Math.round(qty * agroRate + pool.bonusTotal);
+
+      // 4. Agro Bridge Village Hub Drop (+ hub drop handling credit)
+      const abHubCredit = Math.round(qty * model.hubDropBonus);
+      const abHubNet = Math.round(qty * agroRate + abHubCredit + pool.bonusTotal);
+
+      const options = [
+        {
+          id: 'local_mandi',
+          label: `Local mandi (${stats.minEntry.city})`,
+          grossTotal: Math.round(localGross),
+          deductions: localFees,
+          deductionNote: '5% mandi brokerage & handling',
+          netTotal: localNet,
+          netPerKg: qty > 0 ? Number((localNet / qty).toFixed(2)) : 0,
+          payoutTiming: 'Same day cash',
+          riskNote: 'Low price floor'
+        },
+        {
+          id: 'self_haul',
+          label: `Self-transport (${stats.maxEntry.city})`,
+          grossTotal: Math.round(selfGross),
+          deductions: selfFreight + selfCommission + selfSpoilage,
+          deductionNote: `₹${model.freightPerKg}/kg freight · ${Math.round(model.selfCommissionPct * 100)}% fee · ${Math.round(model.selfSpoilagePct * 100)}% spoilage`,
+          netTotal: selfNet,
+          netPerKg: qty > 0 ? Number((selfNet / qty).toFixed(2)) : 0,
+          payoutTiming: model.paymentDelayDays,
+          riskNote: 'High transit & credit risk'
+        },
+        {
+          id: 'agro_gate',
+          label: `Agro Bridge Farm Gate (Grade ${expectedGrade})`,
+          grossTotal: Math.round(qty * agroRate),
+          deductions: -pool.bonusTotal,
+          deductionNote: pool.unlocked ? `₹0 fee · +₹${pool.bonusPerKg}/kg milk-run bonus` : '₹0 brokerage · ₹0 transit spoilage',
+          netTotal: abFarmGateNet,
+          netPerKg: qty > 0 ? Number((abFarmGateNet / qty).toFixed(2)) : 0,
+          payoutTiming: 'Within hours of delivery',
+          riskNote: 'Verified buyer settlement'
+        },
+        {
+          id: 'agro_hub',
+          label: `Agro Bridge Hub Drop (Grade ${expectedGrade})`,
+          grossTotal: Math.round(qty * agroRate),
+          deductions: -(abHubCredit + pool.bonusTotal),
+          deductionNote: `+₹${model.hubDropBonus}/kg drop credit${pool.unlocked ? ` + ₹${pool.bonusPerKg}/kg cluster bonus` : ''}`,
+          netTotal: abHubNet,
+          netPerKg: qty > 0 ? Number((abHubNet / qty).toFixed(2)) : 0,
+          payoutTiming: 'Within hours of delivery',
+          riskNote: 'Highest guaranteed net'
+        }
+      ];
+
+      const bestOption = options.reduce((best, cur) => (cur.netTotal > best.netTotal ? cur : best), options[0]);
+      return {
+        crop,
+        qty,
+        expectedGrade,
+        agroRate,
+        distanceKm: model.distanceKm,
+        options,
+        bestOption,
+        extraVsLocal: abFarmGateNet - localNet
+      };
     }
 
     function calculateCartTotals(cart) {
@@ -2022,6 +2354,21 @@
       }, 0);
     }
 
+    function getPayoutAdjustedTotal(orders) {
+      return (orders || []).reduce((sum, ord) => {
+        if (ord && ord.pm === 'Adjust from payout') {
+          return sum + Math.max(0, Number(ord.total) || 0);
+        }
+        return sum;
+      }, 0);
+    }
+
+    function getAvailablePendingPayout(lots, orders) {
+      const grossPending = getPendingPayout(lots);
+      const adjusted = getPayoutAdjustedTotal(orders);
+      return Math.max(0, grossPending - adjusted);
+    }
+
     function getReceivedPayout(lots) {
       return (lots || []).reduce((sum, lot) => {
         if (lot.stage >= 6) {
@@ -2031,8 +2378,69 @@
       }, 0);
     }
 
-    function canAdjustFromPayout(cartTotal, pendingPayout) {
-      return cartTotal > 0 && cartTotal <= pendingPayout;
+    function canAdjustFromPayout(cartTotal, availablePending) {
+      return cartTotal > 0 && cartTotal <= availablePending;
+    }
+
+    function getForecastAccuracyStats(lots) {
+      const settled = (lots || []).filter(l => l.stage >= 6 && Number(l.predictedNet) > 0);
+      if (!settled.length) {
+        return { count: 0, avgAccuracyPct: 0, totalPredicted: 0, totalSettled: 0, variance: 0 };
+      }
+      let totalPredicted = 0;
+      let totalSettled = 0;
+      let accSum = 0;
+      settled.forEach(l => {
+        const pred = Number(l.predictedNet) || 0;
+        const act = calculateLotPayout(l);
+        totalPredicted += pred;
+        totalSettled += act;
+        const errRatio = pred > 0 ? Math.abs(act - pred) / pred : 0;
+        accSum += Math.max(0, (1 - errRatio) * 100);
+      });
+      return {
+        count: settled.length,
+        avgAccuracyPct: Number((accSum / settled.length).toFixed(1)),
+        totalPredicted,
+        totalSettled,
+        variance: totalSettled - totalPredicted
+      };
+    }
+
+    function isValidEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email || '').trim());
+    }
+
+    function validateOtpCode(otp) {
+      return /^\d{4}$/.test(String(otp || '').trim());
+    }
+
+    function isValidPickupDate(dateStr, todayIso) {
+      const val = String(dateStr || '').trim();
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(val)) return false;
+      const floor = todayIso || new Date().toISOString().slice(0, 10);
+      return val >= floor;
+    }
+
+    function validateSettingsForm(settings) {
+      if (!settings || !String(settings.profileName || '').trim()) {
+        return { ok: false, error: 'Please enter your full name' };
+      }
+      if (settings.payoutMethod === 'UPI') {
+        if (!/^[a-zA-Z0-9._-]{2,}@[a-zA-Z0-9]{2,}$/.test(String(settings.upi || '').trim())) {
+          return { ok: false, error: 'Enter a valid UPI ID (e.g., name@okicici)' };
+        }
+      }
+      if (settings.payoutMethod === 'Bank transfer') {
+        const cleanAcc = String(settings.account || '').replace(/\s+/g, '');
+        if (!/^\d{9,18}$/.test(cleanAcc)) {
+          return { ok: false, error: 'Bank account number must be 9 to 18 digits' };
+        }
+        if (!/^[A-Z]{4}0[A-Z0-9]{6}$/i.test(String(settings.ifsc || '').trim())) {
+          return { ok: false, error: 'Enter a valid 11-character IFSC code (e.g., SBIN0004192)' };
+        }
+      }
+      return { ok: true, error: '' };
     }
 
     function maskAccountNumber(acc) {
@@ -2114,7 +2522,19 @@
           price: 9,
           pm: 'UPI',
           driver: 'Manjunath Gowda',
-          vehicle: 'KA-07-AG-4182'
+          vehicle: 'KA-07-AG-4182',
+          predictedGrade: 'A',
+          predictedNet: 10800,
+          clusterBonus: 0,
+          buyerMatch: 'Sri Murugan Fresh Retail (Chennai)',
+          disputeFlagged: false,
+          inspection: {
+            grade: 'A',
+            rate: 9,
+            checkedItems: ['Dry and clean', 'Sorted by size', 'No bruising', 'Packed in crates'],
+            missingItems: [],
+            reason: 'Passed 4/4 quality checks (Dry and clean, Sorted by size, No bruising, Packed in crates)'
+          }
         },
         {
           id: 'AB-2270',
@@ -2128,7 +2548,19 @@
           price: 11,
           pm: 'UPI',
           driver: 'Suresh Patil',
-          vehicle: 'KA-40-AB-2914'
+          vehicle: 'KA-40-AB-2914',
+          predictedGrade: 'B',
+          predictedNet: 9900,
+          clusterBonus: 0,
+          buyerMatch: 'Kaveri Agro Processors (Hyderabad)',
+          disputeFlagged: false,
+          inspection: {
+            grade: 'B',
+            rate: 11,
+            checkedItems: ['Dry and clean', 'Sorted by size'],
+            missingItems: ['No bruising', 'Packed in crates'],
+            reason: 'Assigned Grade B because no bruising, packed in crates were not verified'
+          }
         }
       ],
       orders: [],
@@ -2368,12 +2800,13 @@
 
       const initial = (state.profileName || 'F').trim().charAt(0).toUpperCase();
       const navItems = [
-        { id: 'menu', label: 'Menu' },
-        { id: 'book', label: 'Sell' },
-        { id: 'track', label: 'Track' },
-        { id: 'market', label: 'Market' },
-        { id: 'shop', label: 'Shop' }
+        { id: 'menu', label: t('navMenu', 'Menu') },
+        { id: 'book', label: t('navSell', 'Sell') },
+        { id: 'track', label: t('navTrack', 'Track') },
+        { id: 'market', label: t('navMarket', 'Market') },
+        { id: 'shop', label: t('navShop', 'Shop') }
       ];
+      const langShort = { English: 'EN', 'ಕನ್ನಡ': 'ಕ', 'हिन्दी': 'हि', 'தமிழ்': 'த' };
 
       return `
         <header class="top-nav">
@@ -2384,27 +2817,35 @@
 
           <nav class="nav-pill" aria-label="Primary navigation">
             ${navItems.map(item => `
-              <button type="button" class="nav-link ${state.view === item.id ? 'active' : ''}" onclick="goView('${item.id}')">${item.label}</button>
+              <button type="button" class="nav-link ${state.view === item.id ? 'active' : ''}" onclick="goView('${item.id}')">${escapeHtml(item.label)}</button>
             `).join('')}
           </nav>
 
-          <div class="profile-wrap">
-            <button type="button" class="profile-btn" aria-label="Account menu" aria-haspopup="menu" aria-expanded="${state.dropdownOpen ? 'true' : 'false'}" onclick="toggleDropdown(event)">
-              ${escapeHtml(initial)}
-            </button>
-            ${state.dropdownOpen ? `
-              <div class="profile-dropdown" role="menu">
-                <div class="profile-header">
-                  <div class="profile-name">${escapeHtml(state.profileName)}</div>
-                  <div class="profile-sub">${escapeHtml(state.village)}</div>
+          <div style="display:flex; align-items:center; gap:10px; flex-shrink:0;">
+            <div class="lang-switch" role="group" aria-label="Language">
+              ${LANGUAGES.map(l => `
+                <button type="button" class="lang-btn ${state.language === l ? 'active' : ''}" aria-label="${escapeHtml(l)}" onclick="changeLanguage(${jsArg(l)})">${langShort[l] || l}</button>
+              `).join('')}
+            </div>
+
+            <div class="profile-wrap">
+              <button type="button" class="profile-btn" aria-label="Account menu" aria-haspopup="menu" aria-expanded="${state.dropdownOpen ? 'true' : 'false'}" onclick="toggleDropdown(event)">
+                ${escapeHtml(initial)}
+              </button>
+              ${state.dropdownOpen ? `
+                <div class="profile-dropdown" role="menu">
+                  <div class="profile-header">
+                    <div class="profile-name">${escapeHtml(state.profileName)}</div>
+                    <div class="profile-sub">${escapeHtml(state.village)}</div>
+                  </div>
+                  <button type="button" class="dropdown-item" role="menuitem" onclick="goView('orders')">My Order</button>
+                  <button type="button" class="dropdown-item" role="menuitem" onclick="goView('payments')">Payment Status</button>
+                  <button type="button" class="dropdown-item" role="menuitem" onclick="goView('settings')">Settings</button>
+                  <div class="dropdown-divider"></div>
+                  <button type="button" class="dropdown-item danger" role="menuitem" onclick="logout()">Log out</button>
                 </div>
-                <button type="button" class="dropdown-item" role="menuitem" onclick="goView('orders')">My Order</button>
-                <button type="button" class="dropdown-item" role="menuitem" onclick="goView('payments')">Payment Status</button>
-                <button type="button" class="dropdown-item" role="menuitem" onclick="goView('settings')">Settings</button>
-                <div class="dropdown-divider"></div>
-                <button type="button" class="dropdown-item danger" role="menuitem" onclick="logout()">Log out</button>
-              </div>
-            ` : ''}
+              ` : ''}
+            </div>
           </div>
         </header>
       `;
@@ -2413,18 +2854,18 @@
     function renderMobileTabBar() {
       if (!state.user) return '';
       const tabs = [
-        { id: 'menu', label: 'Menu', icon: 'home' },
-        { id: 'book', label: 'Sell', icon: 'calendar-check' },
-        { id: 'track', label: 'Track', icon: 'location-pin' },
-        { id: 'market', label: 'Market', icon: 'price-tag' },
-        { id: 'shop', label: 'Shop', icon: 'bag' }
+        { id: 'menu', label: t('navMenu', 'Menu'), icon: 'home' },
+        { id: 'book', label: t('navSell', 'Sell'), icon: 'calendar-check' },
+        { id: 'track', label: t('navTrack', 'Track'), icon: 'location-pin' },
+        { id: 'market', label: t('navMarket', 'Market'), icon: 'price-tag' },
+        { id: 'shop', label: t('navShop', 'Shop'), icon: 'bag' }
       ];
       return `
         <nav class="mobile-tab-bar visible" aria-label="Mobile navigation">
-          ${tabs.map(t => `
-            <button type="button" class="mobile-tab ${state.view === t.id ? 'active' : ''}" onclick="goView('${t.id}')">
-              ${iconSvg(t.icon)}
-              <span>${t.label}</span>
+          ${tabs.map(tb => `
+            <button type="button" class="mobile-tab ${state.view === tb.id ? 'active' : ''}" onclick="goView('${tb.id}')">
+              ${iconSvg(tb.icon)}
+              <span>${escapeHtml(tb.label)}</span>
             </button>
           `).join('')}
         </nav>
@@ -2504,19 +2945,23 @@
 
     function renderMenuScreen() {
       const activeCount = state.lots.filter(l => l.stage < 6).length;
-      const pendingPayout = getPendingPayout(state.lots);
+      const grossPending = getPendingPayout(state.lots);
+      const adjustedUsed = getPayoutAdjustedTotal(state.orders);
+      const netPending = getAvailablePendingPayout(state.lots, state.orders);
       const receivedPayout = getReceivedPayout(state.lots);
+      const latestCrop = (state.lots[0] && state.lots[0].crop) || 'Tomato';
+      const tipText = CROP_TIPS[latestCrop] || CROP_TIPS.Tomato;
 
       const userCrops = Array.from(new Set(state.lots.map(l => l.crop)));
       const bestMarketsHtml = userCrops.length ? userCrops.map(crop => {
         const stats = getMarketStats(crop);
         return `
-          <button type="button" class="market-row-btn" onclick="jumpToMarket('${crop}')">
+          <button type="button" class="market-row-btn" onclick="jumpToMarket(${jsArg(crop)})">
             <span class="inline-crop">
               <span class="inline-crop-badge">${iconSvg(cropIconName(crop))}</span>
               <span>
                 <strong>${escapeHtml(crop)}</strong>
-                <span style="display:block; font-size:12px; color:var(--muted);">${escapeHtml(stats.maxEntry.city)}, ${escapeHtml(stats.maxEntry.state)} · view rates</span>
+                <span style="display:block; font-size:12px; color:var(--muted);">${escapeHtml(stats.maxEntry.city)}, ${escapeHtml(stats.maxEntry.state)} · compare net realization</span>
               </span>
             </span>
             <span class="tabular" style="font-weight:600; color:var(--accent);">${formatINR(stats.maxEntry.price)}/kg</span>
@@ -2526,33 +2971,33 @@
 
       return `
         ${heroSceneSvg(false)}
-        <h1>Your farm, simplified.</h1>
-        <p class="hero-sub">Today’s transparent rates, active pickups, and payouts at a glance (demonstration data).</p>
+        <h1>${escapeHtml(t('heroMenu', 'Your farm, simplified.'))}</h1>
+        <p class="hero-sub">Today’s transparent rates, active pickups, and net payouts at a glance (demonstration data).</p>
 
         <div class="glass-card">
-          <p class="prompt-line">“Let’s check today’s prices, active lots, and what needs attention…”</p>
+          <p class="prompt-line">“Let’s check today’s net realization, active lots, and what needs attention…”</p>
 
           <div class="grid-4" style="margin-bottom: 20px;">
             <div class="kpi-card">
-              <div class="kpi-label">Active lots</div>
+              <div class="kpi-label">${escapeHtml(t('kpiActive', 'Active lots'))}</div>
               <div class="kpi-value">${activeCount}</div>
               <div class="kpi-sub">In pickup or transit</div>
             </div>
             <div class="kpi-card">
-              <div class="kpi-label">Pending payout</div>
-              <div class="kpi-value">${formatINR(pendingPayout)}</div>
-              <div class="kpi-sub">Due on delivery</div>
+              <div class="kpi-label">${escapeHtml(t('kpiPending', 'Net pending'))}</div>
+              <div class="kpi-value">${formatINR(netPending)}</div>
+              <div class="kpi-sub">${adjustedUsed > 0 ? `${formatINR(grossPending)} − ${formatINR(adjustedUsed)} inputs` : 'Due on delivery'}</div>
             </div>
             <div class="kpi-card">
-              <div class="kpi-label">Received</div>
+              <div class="kpi-label">${escapeHtml(t('kpiReceived', 'Received'))}</div>
               <div class="kpi-value">${formatINR(receivedPayout)}</div>
               <div class="kpi-sub">Settled to date</div>
             </div>
             <div class="kpi-card">
-              <div class="kpi-label">Tomato rate</div>
+              <div class="kpi-label">${escapeHtml(latestCrop)} rate</div>
               <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
-                <div class="kpi-value">${formatINR(BASE_RATES.Tomato)}/kg</div>
-                <span class="inline-crop-badge">${iconSvg('tomato')}</span>
+                <div class="kpi-value">${formatINR(BASE_RATES[latestCrop] || BASE_RATES.Tomato)}/kg</div>
+                <span class="inline-crop-badge">${iconSvg(cropIconName(latestCrop))}</span>
               </div>
               <div class="kpi-sub">Grade A · until 6 PM</div>
             </div>
@@ -2561,7 +3006,7 @@
           <h4 class="sub-heading">Today’s produce rates (Grade A)</h4>
           <div class="crop-picker-grid" style="margin-bottom: 22px;">
             ${Object.keys(BASE_RATES).map(c => `
-              <button type="button" class="crop-pick-card" onclick="jumpToMarket('${c}')">
+              <button type="button" class="crop-pick-card" onclick="jumpToMarket(${jsArg(c)})">
                 <span class="crop-pick-icon">${iconSvg(cropIconName(c))}</span>
                 <span class="crop-pick-name">${escapeHtml(c)}</span>
                 <span class="crop-pick-rate">${formatINR(BASE_RATES[c])}/kg</span>
@@ -2571,20 +3016,20 @@
 
           <h4 class="sub-heading">Sell</h4>
           <div class="grid-2">
-            ${tileHtml('Book Slot', 'Schedule a farm-gate or hub pickup', 'calendar-check', "goView('book')")}
-            ${tileHtml('Track Produce', 'Follow grading, hub & truck transit', 'location-pin', "goView('track')")}
+            ${tileHtml('Book Slot', 'Schedule pickup & check village milk-run bonus', 'calendar-check', "goView('book')")}
+            ${tileHtml('Track Produce', 'Follow grading evidence, hub & truck transit', 'location-pin', "goView('track')")}
           </div>
 
           <h4 class="sub-heading">Market &amp; inputs</h4>
           <div class="grid-2">
-            ${tileHtml('Market Prices', 'Compare rates across Indian cities', 'price-tag', "goView('market')")}
+            ${tileHtml('Net Realization & Markets', 'Compare net earnings vs mandi & self-haul', 'price-tag', "goView('market')")}
             ${tileHtml('Farm Inputs Store', 'Seeds, fertilisers & drip lines', 'bag', "goView('shop')")}
           </div>
 
           <h4 class="sub-heading">Account</h4>
           <div class="grid-2">
             ${tileHtml('My Order', 'Pickup slots & input deliveries', 'list', "goView('orders')")}
-            ${tileHtml('Payment Status', 'Received payouts & references', 'wallet', "goView('payments')")}
+            ${tileHtml('Payment Status', 'Net payouts, deductions & forecast accuracy', 'wallet', "goView('payments')")}
             ${tileHtml('Settings', 'Profile, language & payout bank', 'cog', "goView('settings')")}
           </div>
 
@@ -2595,9 +3040,9 @@
               ${bestMarketsHtml}
             </div>
             <div class="surface-box">
-              <div class="kpi-label" style="margin-bottom:8px;">Tip of the day</div>
+              <div class="kpi-label" style="margin-bottom:8px;">Tip for ${escapeHtml(latestCrop)}</div>
               <p style="margin:0; font-size:14px; line-height:1.55; color:var(--text);">
-                Sort tomatoes by size and pack them in ventilated crates before pickup—clean, unbruised produce consistently qualifies for Grade A rates.
+                ${escapeHtml(tipText)}
               </p>
             </div>
           </div>
@@ -2625,11 +3070,14 @@
       const rateB = getGradeRate(f.crop, 'B');
       const rateC = getGradeRate(f.crop, 'C');
       const hint = estimateGradeHint(state.qualityChecklist.length);
+      const pool = getClusterPoolStatus(f.crop, qty);
+      const netSummary = calculateNetRealization(f.crop, qty, state.qualityChecklist.length);
+      const poolPct = Math.min(100, Math.round((pool.combinedKg / pool.targetKg) * 100));
 
       return `
         ${logisticsSceneSvg(true)}
-        <h1>Book a pickup slot.</h1>
-        <p class="hero-sub">Lock in today’s Grade A reference rate and choose a 2-hour pickup window.</p>
+        <h1>${escapeHtml(t('heroSell', 'Book a pickup slot.'))}</h1>
+        <p class="hero-sub">Lock in today’s Grade A reference rate, join your village milk-run cluster, and see net earnings.</p>
 
         <div class="glass-card">
           <p class="prompt-line">“I have ${qty ? escapeHtml(qty.toLocaleString('en-IN')) : '500'} kg of ${escapeHtml(f.crop.toLowerCase())} ready and want a pickup slot…”</p>
@@ -2638,7 +3086,7 @@
             <span class="field-label">Select crop</span>
             <div class="crop-picker-grid" role="radiogroup" aria-label="Crop">
               ${Object.keys(BASE_RATES).map(c => `
-                <button type="button" role="radio" aria-checked="${f.crop === c}" class="crop-pick-card ${f.crop === c ? 'active' : ''}" onclick="updateSlotField('crop', '${c}')">
+                <button type="button" role="radio" aria-checked="${f.crop === c}" class="crop-pick-card ${f.crop === c ? 'active' : ''}" onclick="updateSlotField('crop', ${jsArg(c)})">
                   <span class="crop-pick-icon">${iconSvg(cropIconName(c))}</span>
                   <span class="crop-pick-name">${escapeHtml(c)}</span>
                   <span class="crop-pick-rate">${formatINR(BASE_RATES[c])}/kg</span>
@@ -2649,12 +3097,12 @@
 
           <div class="grid-2" style="margin-bottom: 16px;">
             <div class="field-group">
-              <label class="field-label" for="slotQty">Quantity (kg)</label>
+              <label class="field-label" for="slotQty">Quantity (kg · min 50 kg)</label>
               <input id="slotQty" class="input-control tabular" type="number" min="50" step="10" value="${escapeHtml(f.qty)}" oninput="updateSlotField('qty', this.value)" />
             </div>
             <div class="field-group">
               <label class="field-label" for="slotDate">Pickup date</label>
-              <input id="slotDate" class="input-control" type="date" value="${escapeHtml(f.date)}" oninput="updateSlotField('date', this.value)" />
+              <input id="slotDate" class="input-control" type="date" min="${escapeHtml(new Date().toISOString().slice(0, 10))}" value="${escapeHtml(f.date)}" oninput="updateSlotField('date', this.value)" />
             </div>
           </div>
 
@@ -2662,23 +3110,39 @@
             <span class="field-label">Pickup point</span>
             <div class="chip-row">
               ${chipHtml('Farm gate', f.pickupPoint === 'Farm gate', "updateSlotField('pickupPoint','Farm gate')")}
-              ${chipHtml('Village collection point', f.pickupPoint === 'Village collection point', "updateSlotField('pickupPoint','Village collection point')")}
+              ${chipHtml('Village collection point (+₹' + (CORRIDOR_MODELS[f.crop]?.hubDropBonus || 0.4) + '/kg)', f.pickupPoint === 'Village collection point', "updateSlotField('pickupPoint','Village collection point')")}
             </div>
           </div>
 
           <div class="field-group" style="margin-bottom: 18px;">
             <span class="field-label">Time window</span>
             <div class="chip-row">
-              ${TIME_WINDOWS.map(tw => chipHtml(tw, f.time === tw, `updateSlotField('time','${tw}')`)).join('')}
+              ${TIME_WINDOWS.map(tw => chipHtml(tw, f.time === tw, `updateSlotField('time',${jsArg(tw)})`)).join('')}
             </div>
           </div>
 
           <div class="field-group" style="margin-bottom: 18px;">
-            <span class="field-label">Quality checklist</span>
+            <span class="field-label">Pre-pickup quality checklist (determines weighbridge audit baseline)</span>
             <div class="chip-row">
-              ${QUALITY_CHECKS.map(q => chipHtml(q, state.qualityChecklist.includes(q), `toggleQualityCheck('${q}')`)).join('')}
+              ${QUALITY_CHECKS.map(q => chipHtml(q, state.qualityChecklist.includes(q), `toggleQualityCheck(${jsArg(q)})`)).join('')}
             </div>
             <span style="font-size: 13px; font-weight: 500; color: var(--accent); margin-top: 2px;">${escapeHtml(hint)}</span>
+          </div>
+
+          <div class="cluster-banner" id="clusterPoolBanner">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:6px;">
+              <strong style="font-size:14px; color:var(--ink);">Shared milk-run truck pool · ${escapeHtml(pool.hub)}</strong>
+              ${statusPillHtml(pool.unlocked ? `FTL Bonus Unlocked (+${formatINR(pool.bonusTotal)})` : `${pool.remainingToUnlock.toLocaleString('en-IN')} kg to bonus`, pool.unlocked ? 'success' : 'neutral')}
+            </div>
+            <div style="font-size:13px; color:var(--text); margin-bottom:8px;">
+              ${pool.existingKg.toLocaleString('en-IN')} kg already booked by neighboring farmers + your ${qty.toLocaleString('en-IN')} kg = <strong>${pool.combinedKg.toLocaleString('en-IN')} / ${pool.targetKg.toLocaleString('en-IN')} kg</strong> full-truckload target.
+              ${pool.unlocked
+                ? `Pooling unlocks +₹${pool.bonusPerKg}/kg shared-freight savings (${formatINR(pool.bonusTotal)} added to your payout).`
+                : `Add ${pool.remainingToUnlock.toLocaleString('en-IN')} kg more to unlock +₹${pool.bonusPerKg}/kg milk-run bonus.`}
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill" style="width:${poolPct}%; background:var(--accent);"></div>
+            </div>
           </div>
 
           <div class="surface-box" style="margin-bottom: 20px;">
@@ -2687,26 +3151,28 @@
                 <span class="inline-crop-badge">${iconSvg(cropIconName(f.crop))}</span>
                 <span>Today’s rate: ${formatINR(rateA)}/kg (Grade A) · valid until 6:00 PM</span>
               </span>
-              <span id="slotEstRange" class="status-pill neutral tabular">Est. ${formatINR(qty * rateC)} – ${formatINR(qty * rateA)}</span>
+              <span id="slotEstRange" class="status-pill neutral tabular">Est. ${formatINR(qty * rateC + pool.bonusTotal)} – ${formatINR(qty * rateA + pool.bonusTotal)}</span>
             </div>
             <div class="grid-4" style="grid-template-columns: repeat(3, minmax(0,1fr)); gap: 10px;">
               <div>
                 <div class="kpi-label">Grade A (100%)</div>
-                <div class="tabular" style="font-size:15px; font-weight:600;">${formatINR(rateA)}/kg · ${formatINR(qty * rateA)}</div>
+                <div class="tabular" data-grade-cell="A" style="font-size:15px; font-weight:600;">${formatINR(rateA)}/kg · ${formatINR(qty * rateA)}</div>
               </div>
               <div>
                 <div class="kpi-label">Grade B (92%)</div>
-                <div class="tabular" style="font-size:15px; font-weight:600;">${formatINR(rateB)}/kg · ${formatINR(qty * rateB)}</div>
+                <div class="tabular" data-grade-cell="B" style="font-size:15px; font-weight:600;">${formatINR(rateB)}/kg · ${formatINR(qty * rateB)}</div>
               </div>
               <div>
                 <div class="kpi-label">Grade C (85%)</div>
-                <div class="tabular" style="font-size:15px; font-weight:600;">${formatINR(rateC)}/kg · ${formatINR(qty * rateC)}</div>
+                <div class="tabular" data-grade-cell="C" style="font-size:15px; font-weight:600;">${formatINR(rateC)}/kg · ${formatINR(qty * rateC)}</div>
               </div>
             </div>
-            <p class="demo-note" style="margin-bottom: 0;">Final grade and rate are set at weighing and grading (demonstration rates).</p>
+            <p id="slotNetSummary" class="demo-note" style="margin-bottom: 0; color: var(--text);">
+              Expected Net Realization (Grade ${netSummary.expectedGrade}): <strong>${formatINR(f.pickupPoint === 'Village collection point' ? netSummary.options[3].netTotal : netSummary.options[2].netTotal)}</strong> (${netSummary.extraVsLocal >= 0 ? '+' : ''}${formatINR(netSummary.extraVsLocal)} above local mandi after brokerage).
+            </p>
           </div>
 
-          <button type="button" class="btn-primary" onclick="confirmSlot()">Confirm slot</button>
+          <button type="button" class="btn-primary" onclick="confirmSlot()">${escapeHtml(t('btnConfirmSlot', 'Confirm slot'))}</button>
         </div>
       `;
     }
@@ -2715,7 +3181,7 @@
       if (!state.lots.length) {
         return `
           ${logisticsSceneSvg(true)}
-          <h1>Track your produce.</h1>
+          <h1>${escapeHtml(t('heroTrack', 'Track your produce.'))}</h1>
           <p class="hero-sub">Follow every stage from farm pickup to grading, hub dispatch, and payout.</p>
           <div class="glass-card" style="text-align:center;">
             ${logisticsSceneSvg(true)}
@@ -2738,14 +3204,14 @@
 
       return `
         ${logisticsSceneSvg(true)}
-        <h1>Track your produce.</h1>
+        <h1>${escapeHtml(t('heroTrack', 'Track your produce.'))}</h1>
         <p class="hero-sub">Live 7-stage movement from your farm gate to market settlement (demo).</p>
 
         <div class="glass-card">
           <p class="prompt-line">“Where is lot ${escapeHtml(lot.id)} right now, and when will I get paid…”</p>
 
           <div class="chip-row" style="margin-bottom: 18px;">
-            ${state.lots.map(l => chipHtml(`${l.id} · ${l.crop}`, l.id === lot.id, `selectLot('${l.id}')`, cropIconName(l.crop))).join('')}
+            ${state.lots.map(l => chipHtml(`${l.id} · ${l.crop}`, l.id === lot.id, `selectLot(${jsArg(l.id)})`, cropIconName(l.crop))).join('')}
           </div>
 
           <div class="route-box">
@@ -2780,20 +3246,21 @@
               <div style="font-size:15px; font-weight:600;">${escapeHtml(getStageEta(lot))}</div>
             </div>
             <div class="surface-box" style="padding:14px;">
-              <div class="kpi-label">Vehicle</div>
-              <div style="font-size:15px; font-weight:600;" class="tabular">${escapeHtml(lot.vehicle)}</div>
+              <div class="kpi-label">Matched Buyer</div>
+              <div style="font-size:14px; font-weight:600;">${escapeHtml(lot.buyerMatch || 'Verified Hub Buyer')}</div>
             </div>
             <div class="surface-box" style="padding:14px;">
-              <div class="kpi-label">Driver</div>
-              <div style="font-size:15px; font-weight:600;">${escapeHtml(lot.driver)}</div>
+              <div class="kpi-label">Driver &amp; Vehicle</div>
+              <div style="font-size:14px; font-weight:600;" class="tabular">${escapeHtml(lot.driver)} · ${escapeHtml(lot.vehicle)}</div>
             </div>
             <div class="surface-box" style="padding:14px;">
               <div class="kpi-label">Grade</div>
-              <div style="font-size:15px; font-weight:600;">${lot.stage >= 3 ? `Grade ${lot.grade} (${formatINR(lot.price)}/kg)` : 'Pending grading'}</div>
+              <div style="font-size:15px; font-weight:600;">${lot.stage >= 3 ? `Grade ${lot.grade} (${formatINR(lot.price)}/kg)` : `Est. Grade ${lot.predictedGrade || 'A'}`}</div>
             </div>
             <div class="surface-box" style="padding:14px;">
               <div class="kpi-label">Payout</div>
               <div style="font-size:15px; font-weight:600;" class="tabular">${lot.stage >= 3 ? formatINR(payoutAmount) : 'After weighing'}</div>
+              ${lot.clusterBonus > 0 ? `<div style="font-size:11px; color:var(--accent);">Includes +${formatINR(lot.clusterBonus)} milk-run bonus</div>` : ''}
             </div>
             <div class="surface-box" style="padding:14px;">
               <div class="kpi-label">Payment</div>
@@ -2803,9 +3270,35 @@
             </div>
           </div>
 
+          ${lot.stage >= 3 && lot.inspection ? `
+            <div class="surface-box" style="margin-bottom: 18px; border: 1px solid var(--line);">
+              <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+                <h4 class="sub-heading" style="margin:0;">Weighbridge &amp; quality grading evidence</h4>
+                <div style="display:flex; gap:8px; align-items:center;">
+                  ${statusPillHtml(`Grade ${lot.inspection.grade} Verified`, lot.inspection.grade === 'A' ? 'success' : 'warn')}
+                  ${lot.disputeFlagged
+                    ? statusPillHtml('Review requested', 'warn')
+                    : `<button type="button" class="btn-secondary" style="height:30px; font-size:12px;" onclick="flagQualityReview(${jsArg(lot.id)})">Request grade review</button>`}
+                </div>
+              </div>
+              <p style="font-size:13px; color:var(--text); margin:8px 0 4px;">${escapeHtml(lot.inspection.reason)}</p>
+              <div class="evidence-grid">
+                ${QUALITY_CHECKS.map(chk => {
+                  const passed = lot.inspection.checkedItems.includes(chk);
+                  return `
+                    <div class="evidence-item">
+                      <span>${escapeHtml(chk)}</span>
+                      ${statusPillHtml(passed ? 'Passed' : 'Missed', passed ? 'success' : 'warn')}
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+          ` : ''}
+
           <div class="chip-row" style="margin-bottom: 22px;">
-            ${chipHtml('Call driver', false, "showToast('Calling " + escapeHtml(lot.driver) + " (demo action)')", 'phone')}
-            ${chipHtml('Share status', false, "showToast('Tracking link copied for lot " + escapeHtml(lot.id) + "')", 'share')}
+            ${chipHtml('Call driver', false, `showToast(${jsArg('Calling ' + lot.driver + ' (demo action)')})`, 'phone')}
+            ${chipHtml('Share status', false, `showToast(${jsArg('Tracking link copied for lot ' + lot.id)})`, 'share')}
             ${chipHtml('Get help', false, "showToast('Agro Bridge helpline: 1800-000-0000 (demo)')", 'bell')}
           </div>
 
@@ -2826,7 +3319,7 @@
           </div>
 
           ${lot.stage < 6 ? `
-            <button type="button" class="btn-primary" onclick="advanceLotStage('${lot.id}')">Simulate next step (demo)</button>
+            <button type="button" class="btn-primary" onclick="advanceLotStage(${jsArg(lot.id)})">Simulate next step (demo)</button>
           ` : `
             <div class="surface-box" style="border: 1px solid var(--accent);">
               <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:12px;">
@@ -2835,7 +3328,7 @@
               </div>
               <div class="grid-4" style="grid-template-columns: repeat(3, minmax(0,1fr)); gap:12px;">
                 <div><div class="kpi-label">Produce</div><div class="tabular" style="font-weight:600;">${lot.qty.toLocaleString('en-IN')} kg ${escapeHtml(lot.crop)}</div></div>
-                <div><div class="kpi-label">Grade &amp; rate</div><div class="tabular" style="font-weight:600;">Grade ${lot.grade} · ${formatINR(lot.price)}/kg</div></div>
+                <div><div class="kpi-label">Grade &amp; rate</div><div class="tabular" style="font-weight:600;">Grade ${lot.grade} · ${formatINR(lot.price)}/kg${lot.clusterBonus > 0 ? ` (+${formatINR(lot.clusterBonus)} bonus)` : ''}</div></div>
                 <div><div class="kpi-label">Method</div><div class="method-inline" style="font-weight:600;">${iconSvg(paymentMethodIconName(lot.pm))}${escapeHtml(lot.pm)}</div></div>
                 <div><div class="kpi-label">Reference</div><div class="tabular" style="font-weight:600;">${escapeHtml(getPaymentRef(lot))}</div></div>
                 <div><div class="kpi-label">Status</div><div style="font-weight:600; color:var(--pill-success-fg);">Settled</div></div>
@@ -2852,17 +3345,20 @@
       const stats = getMarketStats(crop);
       const maxVal = stats.maxEntry.price || 1;
       const extra = calculateEarningsExtra(crop, state.marketCalcQty);
+      const calcQty = Math.max(0, Number(state.marketCalcQty) || 0);
+      const net = calculateNetRealization(crop, calcQty, state.qualityChecklist.length);
+      const buyers = VERIFIED_BUYERS[crop] || [];
 
       return `
         ${logisticsSceneSvg(true)}
-        <h1>Today’s mandi rates.</h1>
-        <p class="hero-sub">See how surplus-district rates compare with high-demand cities across India (demo figures).</p>
+        <h1>${escapeHtml(t('heroMarket', 'Today’s mandi rates.'))}</h1>
+        <p class="hero-sub">Compare city wholesale rates, true net realization after freight &amp; spoilage, and verified buyer settlement reliability (demo figures).</p>
 
         <div class="glass-card">
-          <p class="prompt-line">“What are buyers paying for ${escapeHtml(crop.toLowerCase())} across cities today, and how much more can I earn…”</p>
+          <p class="prompt-line">“What do I actually keep in hand for ${escapeHtml(crop.toLowerCase())} across selling options today…”</p>
 
           <div class="chip-row" style="margin-bottom: 20px;">
-            ${Object.keys(MARKET_PRICES).map(c => chipHtml(c, crop === c, `selectMarketCrop('${c}')`, cropIconName(c))).join('')}
+            ${Object.keys(MARKET_PRICES).map(c => chipHtml(c, crop === c, `selectMarketCrop(${jsArg(c)})`, cropIconName(c))).join('')}
           </div>
 
           <div class="surface-box" style="margin-bottom: 16px;">
@@ -2903,6 +3399,53 @@
             </div>
           </div>
 
+          <h4 class="sub-heading">Net realization engine (${calcQty.toLocaleString('en-IN')} kg · Grade ${net.expectedGrade})</h4>
+          <div id="netRealizationGrid" class="net-grid" style="margin-bottom: 18px;">
+            ${net.options.map(opt => {
+              const isBest = opt.id === net.bestOption.id;
+              return `
+                <div class="net-card ${isBest ? 'recommended' : ''}">
+                  <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+                    <strong style="font-size:14px; color:var(--ink);">${escapeHtml(opt.label)}</strong>
+                    ${isBest ? statusPillHtml('Highest net', 'success') : statusPillHtml(opt.riskNote, opt.id === 'self_haul' ? 'warn' : 'neutral')}
+                  </div>
+                  <div class="net-line">
+                    <span>Gross value</span>
+                    <span class="tabular">${formatINR(opt.grossTotal)}</span>
+                  </div>
+                  <div class="net-line">
+                    <span>${opt.deductions >= 0 ? 'Freight / fees / spoilage' : 'Consolidation &amp; drop credit'}</span>
+                    <span class="tabular" style="color:${opt.deductions > 0 ? 'var(--accent)' : 'var(--pill-success-fg)'};">
+                      ${opt.deductions > 0 ? '−' + formatINR(opt.deductions) : '+' + formatINR(Math.abs(opt.deductions))}
+                    </span>
+                  </div>
+                  <div style="font-size:12px; color:var(--muted);">${escapeHtml(opt.deductionNote)} · ${escapeHtml(opt.payoutTiming)}</div>
+                  <div class="net-total">
+                    <span style="font-size:12px; font-weight:600; text-transform:uppercase; color:var(--muted);">Net in pocket</span>
+                    <span class="tabular" style="font-family:var(--font-display); font-size:20px; font-weight:500; color:var(--ink);">${formatINR(opt.netTotal)} <span style="font-size:12px; font-family:var(--font-sans); color:var(--muted);">(₹${opt.netPerKg}/kg)</span></span>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+
+          <h4 class="sub-heading">Verified destination buyers for ${escapeHtml(crop)} (demo ledger reliability)</h4>
+          <div class="grid-2" style="margin-bottom: 18px;">
+            ${buyers.map(b => `
+              <div class="buyer-card">
+                <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+                  <strong style="font-size:15px;">${escapeHtml(b.name)}</strong>
+                  ${statusPillHtml(`${b.onTimePct}% on-time`, 'success')}
+                </div>
+                <div style="font-size:13px; color:var(--muted);">${escapeHtml(b.city)} · ${b.lotsSettled} verified lots settled · avg ${b.avgHours}h payout</div>
+                <div style="display:flex; justify-content:space-between; font-size:13px; font-weight:600;">
+                  <span>Rejection rate: ${b.rejectionPct}%</span>
+                  <span style="color:var(--accent);">Today’s demand: ${b.demandKg.toLocaleString('en-IN')} kg</span>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+
           <div class="grid-2">
             <div class="surface-box">
               <h4 class="sub-heading" style="margin-top:0;">Earnings calculator</h4>
@@ -2911,7 +3454,7 @@
                 <input id="calcQty" class="input-control tabular" type="number" min="0" step="50" value="${escapeHtml(state.marketCalcQty)}" oninput="updateMarketCalc(this.value)" />
               </div>
               <div id="calcResultBox" style="padding:12px 14px; border-radius:14px; background:var(--tan); font-size:14px; font-weight:600; color:var(--ink);">
-                ${formatINR(extra)} extra on ${Number(state.marketCalcQty || 0).toLocaleString('en-IN')} kg compared with selling at the local rate
+                ${formatINR(extra)} extra on ${calcQty.toLocaleString('en-IN')} kg compared with selling at the local rate
               </div>
             </div>
 
@@ -2941,20 +3484,22 @@
         : STORE_PRODUCTS.filter(p => p.category === state.selectedCategory);
 
       const totals = calculateCartTotals(state.cart);
-      const pendingPayout = getPendingPayout(state.lots);
-      const payoutInsufficient = state.shopPaymentMethod === 'Adjust from payout' && totals.total > 0 && !canAdjustFromPayout(totals.total, pendingPayout);
+      const grossPending = getPendingPayout(state.lots);
+      const alreadyAdjusted = getPayoutAdjustedTotal(state.orders);
+      const availablePending = getAvailablePendingPayout(state.lots, state.orders);
+      const payoutInsufficient = state.shopPaymentMethod === 'Adjust from payout' && totals.total > 0 && !canAdjustFromPayout(totals.total, availablePending);
       const canPlaceOrder = totals.itemCount > 0 && !payoutInsufficient;
 
       return `
         ${logisticsSceneSvg(true)}
-        <h1>Farm inputs store.</h1>
+        <h1>${escapeHtml(t('heroShop', 'Farm inputs store.'))}</h1>
         <p class="hero-sub">Genuine seeds, nutrients, and irrigation kits delivered to your village (demo store).</p>
 
         <div class="glass-card">
           <p class="prompt-line">“I need quality seeds, fertilisers, or drip lines delivered to my farm…”</p>
 
           <div class="chip-row" style="margin-bottom: 18px;">
-            ${STORE_CATEGORIES.map(c => chipHtml(c, state.selectedCategory === c, `selectStoreCategory('${c}')`, catIcons[c])).join('')}
+            ${STORE_CATEGORIES.map(c => chipHtml(c, state.selectedCategory === c, `selectStoreCategory(${jsArg(c)})`, catIcons[c])).join('')}
           </div>
 
           <div class="product-grid">
@@ -2993,13 +3538,18 @@
           </div>
 
           <h4 class="sub-heading">Payment method</h4>
-          <div class="chip-row" style="margin-bottom: 18px;">
-            ${STORE_PAY_METHODS.map(m => chipHtml(m, state.shopPaymentMethod === m, `selectShopPayment('${m}')`, paymentMethodIconName(m))).join('')}
+          <div class="chip-row" style="margin-bottom: 10px;">
+            ${STORE_PAY_METHODS.map(m => chipHtml(m, state.shopPaymentMethod === m, `selectShopPayment(${jsArg(m)})`, paymentMethodIconName(m))).join('')}
           </div>
+          ${state.shopPaymentMethod === 'Adjust from payout' ? `
+            <p class="demo-note" style="margin-top:0; margin-bottom:12px; color:var(--text);">
+              Available payout credit: <strong class="tabular">${formatINR(availablePending)}</strong> (${formatINR(grossPending)} pending − ${formatINR(alreadyAdjusted)} already adjusted).
+            </p>
+          ` : ''}
 
           ${payoutInsufficient ? `
             <p style="font-size:13px; font-weight:600; color:var(--accent); margin:0 0 12px;">
-              Pending payout (${formatINR(pendingPayout)}) is lower than order total (${formatINR(totals.total)}). Choose another payment method or adjust cart items.
+              Available pending payout (${formatINR(availablePending)}) is lower than order total (${formatINR(totals.total)}). Choose another payment method or adjust cart items.
             </p>
           ` : ''}
 
@@ -3028,7 +3578,7 @@
             </div>
             <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
               ${totals.itemCount > 0 ? `<button type="button" class="btn-secondary" style="height:44px;" onclick="clearCart()">Clear</button>` : ''}
-              <button type="button" class="btn-primary" ${canPlaceOrder ? '' : 'disabled'} onclick="placeShopOrder()">Place order</button>
+              <button type="button" class="btn-primary" ${canPlaceOrder ? '' : 'disabled'} onclick="placeShopOrder()">${escapeHtml(t('btnPlaceOrder', 'Place order'))}</button>
             </div>
           </div>
         </div>
@@ -3071,7 +3621,7 @@
                       </td>
                       <td>${escapeHtml(l.pickupPoint)} · ${escapeHtml(l.time)}</td>
                       <td>${statusPillHtml(stTitle, tone)}</td>
-                      <td><button type="button" class="btn-secondary" onclick="trackLot('${l.id}')">Track</button></td>
+                      <td><button type="button" class="btn-secondary" onclick="trackLot(${jsArg(l.id)})">Track</button></td>
                     </tr>
                   `;
                 }).join('')}
@@ -3112,8 +3662,8 @@
                         <td>${statusPillHtml(st, tone)}</td>
                         <td>
                           <div style="display:flex; gap:8px;">
-                            ${o.stage < 3 ? `<button type="button" class="btn-secondary" onclick="advanceOrder('${o.id}')">Next</button>` : ''}
-                            <button type="button" class="btn-secondary" onclick="reorderItems('${o.id}')">Reorder</button>
+                            ${o.stage < 3 ? `<button type="button" class="btn-secondary" onclick="advanceOrder(${jsArg(o.id)})">Next</button>` : ''}
+                            <button type="button" class="btn-secondary" onclick="reorderItems(${jsArg(o.id)})">Reorder</button>
                           </div>
                         </td>
                       </tr>
@@ -3129,7 +3679,10 @@
 
     function renderPaymentsScreen() {
       const received = getReceivedPayout(state.lots);
-      const pending = getPendingPayout(state.lots);
+      const grossPending = getPendingPayout(state.lots);
+      const adjusted = getPayoutAdjustedTotal(state.orders);
+      const netPending = getAvailablePendingPayout(state.lots, state.orders);
+      const accuracy = getForecastAccuracyStats(state.lots);
 
       let methodBoxText = '';
       if (state.payoutMethod === 'UPI') {
@@ -3143,27 +3696,32 @@
       return `
         ${logisticsSceneSvg(true)}
         <h1>Payouts &amp; receipts.</h1>
-        <p class="hero-sub">Transparent settlement history for every graded and delivered lot.</p>
+        <p class="hero-sub">Transparent settlement ledger, input deductions, and predicted-vs-settled accuracy.</p>
 
         <div class="glass-card">
-          <p class="prompt-line">“How much have I received so far, and where will my next payout go…”</p>
+          <p class="prompt-line">“How much have I received, what was deducted for inputs, and how accurate were my estimates…”</p>
 
-          <div class="grid-2" style="margin-bottom: 20px;">
+          <div class="grid-4" style="grid-template-columns: repeat(3, minmax(0, 1fr)); margin-bottom: 20px;">
             <div class="kpi-card">
               <div class="kpi-label">Received</div>
               <div class="kpi-value" style="color:var(--pill-success-fg);">${formatINR(received)}</div>
-              <div class="kpi-sub">Paid lots</div>
+              <div class="kpi-sub">Settled lots</div>
             </div>
             <div class="kpi-card">
-              <div class="kpi-label">Pending</div>
-              <div class="kpi-value" style="color:var(--accent);">${formatINR(pending)}</div>
-              <div class="kpi-sub">Weighed &amp; awaiting delivery</div>
+              <div class="kpi-label">Net pending payable</div>
+              <div class="kpi-value" style="color:var(--accent);">${formatINR(netPending)}</div>
+              <div class="kpi-sub">${adjusted > 0 ? `${formatINR(grossPending)} gross − ${formatINR(adjusted)} input deductions` : 'Weighed &amp; awaiting delivery'}</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">Estimate accuracy</div>
+              <div class="kpi-value">${accuracy.count > 0 ? accuracy.avgAccuracyPct + '%' : '—'}</div>
+              <div class="kpi-sub">${accuracy.count > 0 ? `${accuracy.count} settled lot${accuracy.count === 1 ? '' : 's'} calibrated` : 'Pending first settlement'}</div>
             </div>
           </div>
 
-          <h4 class="sub-heading">Preferred payout method</h4>
+          <h4 class="sub-heading">Preferred payout method (applies to new bookings)</h4>
           <div class="chip-row" style="margin-bottom: 12px;">
-            ${PAYOUT_METHODS.map(m => chipHtml(m, state.payoutMethod === m, `selectPayoutMethod('${m}')`, paymentMethodIconName(m))).join('')}
+            ${PAYOUT_METHODS.map(m => chipHtml(m, state.payoutMethod === m, `selectPayoutMethod(${jsArg(m)})`, paymentMethodIconName(m))).join('')}
           </div>
           <div class="surface-box" style="margin-bottom: 22px;">
             <div style="font-size:14px; font-weight:500; line-height:1.5;">${escapeHtml(methodBoxText)}</div>
@@ -3229,7 +3787,7 @@
             </div>
             <div class="field-group">
               <label class="field-label" for="setLang">Language</label>
-              <select id="setLang" class="input-control" onchange="state.language = this.value">
+              <select id="setLang" class="input-control" onchange="changeLanguage(this.value)">
                 ${LANGUAGES.map(l => `<option value="${l}" ${state.language === l ? 'selected' : ''}>${l}</option>`).join('')}
               </select>
             </div>
@@ -3238,7 +3796,7 @@
           <div class="field-group" style="margin-bottom: 16px;">
             <span class="field-label">Payout method</span>
             <div class="chip-row">
-              ${PAYOUT_METHODS.map(m => chipHtml(m, state.payoutMethod === m, `selectPayoutMethod('${m}')`, paymentMethodIconName(m))).join('')}
+              ${PAYOUT_METHODS.map(m => chipHtml(m, state.payoutMethod === m, `selectPayoutMethod(${jsArg(m)})`, paymentMethodIconName(m))).join('')}
             </div>
           </div>
 
@@ -3451,8 +4009,8 @@
 
     function loginWithEmail() {
       const val = state.emailInput.trim();
-      if (!val) {
-        showToast('Enter an email address to continue');
+      if (!isValidEmail(val)) {
+        showToast('Enter a valid email address to continue');
         return;
       }
       const derived = val.split('@')[0].replace(/[._-]+/g, ' ').trim();
@@ -3461,8 +4019,9 @@
     }
 
     function sendOtp() {
-      if (!state.phoneInput.trim()) {
-        showToast('Enter a mobile number to receive a demo OTP');
+      const digits = state.phoneInput.replace(/\D/g, '');
+      if (digits.length < 10) {
+        showToast('Enter a valid 10-digit mobile number');
         return;
       }
       state.otpSent = true;
@@ -3471,8 +4030,8 @@
     }
 
     function verifyOtp() {
-      if (!state.otpInput.trim()) {
-        showToast('Enter the 4-digit OTP to log in');
+      if (!validateOtpCode(state.otpInput)) {
+        showToast('Enter a valid 4-digit numeric OTP');
         return;
       }
       completeLogin(state.profileName);
@@ -3495,6 +4054,13 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
+    function changeLanguage(lang) {
+      if (!TRANSLATIONS[lang]) return;
+      state.language = lang;
+      showToast(`Language switched to ${lang}`);
+      renderApp();
+    }
+
     function toggleDropdown(e) {
       e.stopPropagation();
       state.dropdownOpen = !state.dropdownOpen;
@@ -3504,26 +4070,32 @@
     function updateSlotField(field, val) {
       state.slotForm[field] = field === 'qty' ? Number(val) : val;
       if (field === 'qty') {
-        const promptEl = document.querySelector('.prompt-line');
-        if (promptEl) {
-          const q = Math.max(0, Number(val) || 0);
-          promptEl.textContent = `“I have ${q ? q.toLocaleString('en-IN') : '500'} kg of ${state.slotForm.crop.toLowerCase()} ready and want a pickup slot…”`;
-        }
-        // Update rate values inline without stealing input focus
         const qty = Math.max(0, Number(val) || 0);
         const f = state.slotForm;
+        const promptEl = document.querySelector('.prompt-line');
+        if (promptEl) {
+          promptEl.textContent = `“I have ${qty ? qty.toLocaleString('en-IN') : '500'} kg of ${f.crop.toLowerCase()} ready and want a pickup slot…”`;
+        }
         const rA = getGradeRate(f.crop, 'A');
         const rB = getGradeRate(f.crop, 'B');
         const rC = getGradeRate(f.crop, 'C');
-        const cells = document.querySelectorAll('.surface-box .grid-4 .tabular');
-        if (cells.length === 3) {
-          cells[0].textContent = `${formatINR(rA)}/kg · ${formatINR(qty * rA)}`;
-          cells[1].textContent = `${formatINR(rB)}/kg · ${formatINR(qty * rB)}`;
-          cells[2].textContent = `${formatINR(rC)}/kg · ${formatINR(qty * rC)}`;
-        }
+        const cellA = document.querySelector('[data-grade-cell="A"]');
+        const cellB = document.querySelector('[data-grade-cell="B"]');
+        const cellC = document.querySelector('[data-grade-cell="C"]');
+        if (cellA) cellA.textContent = `${formatINR(rA)}/kg · ${formatINR(qty * rA)}`;
+        if (cellB) cellB.textContent = `${formatINR(rB)}/kg · ${formatINR(qty * rB)}`;
+        if (cellC) cellC.textContent = `${formatINR(rC)}/kg · ${formatINR(qty * rC)}`;
+
+        const pool = getClusterPoolStatus(f.crop, qty);
         const rangeEl = document.getElementById('slotEstRange');
         if (rangeEl) {
-          rangeEl.textContent = `Est. ${formatINR(qty * rC)} – ${formatINR(qty * rA)}`;
+          rangeEl.textContent = `Est. ${formatINR(qty * rC + pool.bonusTotal)} – ${formatINR(qty * rA + pool.bonusTotal)}`;
+        }
+        const netSummary = calculateNetRealization(f.crop, qty, state.qualityChecklist.length);
+        const netEl = document.getElementById('slotNetSummary');
+        if (netEl) {
+          const optTotal = f.pickupPoint === 'Village collection point' ? netSummary.options[3].netTotal : netSummary.options[2].netTotal;
+          netEl.innerHTML = `Expected Net Realization (Grade ${netSummary.expectedGrade}): <strong>${formatINR(optTotal)}</strong> (${netSummary.extraVsLocal >= 0 ? '+' : ''}${formatINR(netSummary.extraVsLocal)} above local mandi after brokerage).`;
         }
         return;
       }
@@ -3551,17 +4123,26 @@
     function confirmSlot() {
       const f = state.slotForm;
       const qty = Number(f.qty);
-      if (!qty || qty <= 0) {
-        showToast('Enter a valid quantity in kg');
+      if (!qty || qty < 50) {
+        showToast('Enter a quantity of at least 50 kg');
         return;
       }
-      if (!f.date) {
-        showToast('Choose a pickup date');
+      if (!isValidPickupDate(f.date)) {
+        showToast('Choose today or a future pickup date');
         return;
       }
       const newId = 'AB-' + state.nextLotNumber;
       state.nextLotNumber += 1;
       const d = DRIVERS[(state.nextLotNumber) % DRIVERS.length];
+      const checklistCopy = state.qualityChecklist.slice();
+      const forecast = gradeLotFromChecklist(f.crop, checklistCopy);
+      const pool = getClusterPoolStatus(f.crop, qty);
+      const hubCredit = f.pickupPoint === 'Village collection point'
+        ? Math.round(qty * ((CORRIDOR_MODELS[f.crop] && CORRIDOR_MODELS[f.crop].hubDropBonus) || 0.4))
+        : 0;
+      const totalBonus = pool.bonusTotal + hubCredit;
+      const buyers = VERIFIED_BUYERS[f.crop] || [];
+      const buyerMatch = buyers[0] ? `${buyers[0].name} (${buyers[0].city})` : 'Verified Hub Buyer';
 
       state.lots.unshift({
         id: newId,
@@ -3575,11 +4156,18 @@
         price: null,
         pm: state.payoutMethod,
         driver: d.driver,
-        vehicle: d.vehicle
+        vehicle: d.vehicle,
+        checklist: checklistCopy,
+        predictedGrade: forecast.grade,
+        predictedNet: Math.round(qty * forecast.rate + totalBonus),
+        clusterBonus: totalBonus,
+        buyerMatch,
+        disputeFlagged: false,
+        inspection: null
       });
       state.selectedLotId = newId;
       state.alerts.unshift({
-        text: `Pickup slot ${newId} booked for ${qty.toLocaleString('en-IN')} kg ${f.crop}.`,
+        text: `Pickup slot ${newId} booked for ${qty.toLocaleString('en-IN')} kg ${f.crop}${totalBonus > 0 ? ` (+${formatINR(totalBonus)} bonus)` : ''}.`,
         time: 'Just now'
       });
       state.overlay = {
@@ -3601,18 +4189,30 @@
       goView('track');
     }
 
+    function flagQualityReview(id) {
+      const lot = state.lots.find(l => l.id === id);
+      if (!lot) return;
+      lot.disputeFlagged = true;
+      state.alerts.unshift({
+        text: `Quality grade review requested for lot ${lot.id} (Grade ${lot.grade}). Hub supervisor notified.`,
+        time: 'Just now'
+      });
+      showToast(`Grade review logged for ${lot.id}`);
+      renderApp();
+    }
+
     function advanceLotStage(id) {
       const lot = state.lots.find(l => l.id === id);
       if (!lot || lot.stage >= 6) return;
       lot.stage += 1;
 
       if (lot.stage === 3) {
-        const pool = ['A', 'A', 'B', 'C'];
-        const chosen = pool[Math.floor(Math.random() * pool.length)];
-        lot.grade = chosen;
-        lot.price = getGradeRate(lot.crop, chosen);
+        const evidence = gradeLotFromChecklist(lot.crop, lot.checklist || QUALITY_CHECKS.slice(0, 3));
+        lot.grade = evidence.grade;
+        lot.price = evidence.rate;
+        lot.inspection = evidence;
         state.alerts.unshift({
-          text: `Lot ${lot.id} weighed & graded: Grade ${chosen} at ${formatINR(lot.price)}/kg.`,
+          text: `Lot ${lot.id} weighed & graded: Grade ${evidence.grade} at ${formatINR(evidence.rate)}/kg (${evidence.checkedItems.length}/4 checks).`,
           time: 'Just now'
         });
       }
@@ -3641,10 +4241,41 @@
 
     function updateMarketCalc(val) {
       state.marketCalcQty = val;
+      const qty = Math.max(0, Number(val) || 0);
       const box = document.getElementById('calcResultBox');
       if (box) {
-        const extra = calculateEarningsExtra(state.selectedCrop, val);
-        box.textContent = `${formatINR(extra)} extra on ${Math.max(0, Number(val) || 0).toLocaleString('en-IN')} kg compared with selling at the local rate`;
+        const extra = calculateEarningsExtra(state.selectedCrop, qty);
+        box.textContent = `${formatINR(extra)} extra on ${qty.toLocaleString('en-IN')} kg compared with selling at the local rate`;
+      }
+      const net = calculateNetRealization(state.selectedCrop, qty, state.qualityChecklist.length);
+      const netGrid = document.getElementById('netRealizationGrid');
+      if (netGrid) {
+        netGrid.innerHTML = net.options.map(opt => {
+          const isBest = opt.id === net.bestOption.id;
+          return `
+            <div class="net-card ${isBest ? 'recommended' : ''}">
+              <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+                <strong style="font-size:14px; color:var(--ink);">${escapeHtml(opt.label)}</strong>
+                ${isBest ? statusPillHtml('Highest net', 'success') : statusPillHtml(opt.riskNote, opt.id === 'self_haul' ? 'warn' : 'neutral')}
+              </div>
+              <div class="net-line">
+                <span>Gross value</span>
+                <span class="tabular">${formatINR(opt.grossTotal)}</span>
+              </div>
+              <div class="net-line">
+                <span>${opt.deductions >= 0 ? 'Freight / fees / spoilage' : 'Consolidation &amp; drop credit'}</span>
+                <span class="tabular" style="color:${opt.deductions > 0 ? 'var(--accent)' : 'var(--pill-success-fg)'};">
+                  ${opt.deductions > 0 ? '−' + formatINR(opt.deductions) : '+' + formatINR(Math.abs(opt.deductions))}
+                </span>
+              </div>
+              <div style="font-size:12px; color:var(--muted);">${escapeHtml(opt.deductionNote)} · ${escapeHtml(opt.payoutTiming)}</div>
+              <div class="net-total">
+                <span style="font-size:12px; font-weight:600; text-transform:uppercase; color:var(--muted);">Net in pocket</span>
+                <span class="tabular" style="font-family:var(--font-display); font-size:20px; font-weight:500; color:var(--ink);">${formatINR(opt.netTotal)} <span style="font-size:12px; font-family:var(--font-sans); color:var(--muted);">(₹${opt.netPerKg}/kg)</span></span>
+              </div>
+            </div>
+          `;
+        }).join('');
       }
     }
 
@@ -3654,11 +4285,22 @@
         showToast('Enter a valid target price');
         return;
       }
+      const stats = getMarketStats(state.selectedCrop);
+      if (stats.maxEntry.price >= target) {
+        state.alerts.unshift({
+          text: `${state.selectedCrop} is already at ${formatINR(stats.maxEntry.price)}/kg in ${stats.maxEntry.city} (target ${formatINR(target)}/kg reached).`,
+          time: 'Just now'
+        });
+        showToast(`${stats.maxEntry.city} already meets ${formatINR(target)}/kg!`);
+        renderApp();
+        return;
+      }
       state.alerts.unshift({
         text: `Price alert set for ${state.selectedCrop} at ${formatINR(target)}/kg.`,
         time: 'Just now'
       });
       showToast(`Alert set for ${state.selectedCrop} at ${formatINR(target)}/kg`);
+      renderApp();
     }
 
     function selectStoreCategory(cat) {
@@ -3680,10 +4322,10 @@
 
     function placeShopOrder() {
       const totals = calculateCartTotals(state.cart);
-      const pending = getPendingPayout(state.lots);
+      const availablePending = getAvailablePendingPayout(state.lots, state.orders);
       if (totals.itemCount === 0) return;
-      if (state.shopPaymentMethod === 'Adjust from payout' && !canAdjustFromPayout(totals.total, pending)) {
-        showToast('Pending payout is insufficient for this order');
+      if (state.shopPaymentMethod === 'Adjust from payout' && !canAdjustFromPayout(totals.total, availablePending)) {
+        showToast('Available pending payout is insufficient for this order');
         return;
       }
 
@@ -3740,8 +4382,9 @@
     }
 
     function saveSettings() {
-      if (!state.profileName.trim()) {
-        showToast('Please enter your name');
+      const check = validateSettingsForm(state);
+      if (!check.ok) {
+        showToast(check.error);
         return;
       }
       showToast('Settings saved (demo)');
@@ -3749,8 +4392,8 @@
     }
 
     function subscribeUpdates() {
-      if (!state.subscribeEmail.trim()) {
-        showToast('Enter an email address to join');
+      if (!isValidEmail(state.subscribeEmail)) {
+        showToast('Enter a valid email address to join');
         return;
       }
       state.subscribeEmail = '';
